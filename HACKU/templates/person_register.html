@@ -1,0 +1,13 @@
+<body>
+    <h2>登録</h2>
+    <form method="POST">
+        {% csrf_token%}
+        {% for field in form %}
+        <div><!--今度直すかも-->
+            <label>{{field.label}}:</label><br>
+            {{field}}
+        </div>
+        {% endfor%}
+        <button type="submit">提出</button>
+    </form>
+</body>

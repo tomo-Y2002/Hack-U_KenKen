@@ -3,6 +3,8 @@ from django.contrib import messages
 from .models import Person,Record
 from .forms import PersonRegistrationForm
 from django.db.models import Q
+from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def home(request):
@@ -13,20 +15,21 @@ def home(request):
 
 def realtime(request):
     #この関数はまずしっかり出力されるかのテスト用なので後で直す
-    nums=[1,1,2,3]
-    ids=[]
     records=[]
-    for num in nums:
-        passedperson=Person.objects.get(id=num)
-        new_record=Record.objects.create(person=passedperson)#Recordオブジェクトの作成
-        ids.append(new_record.id)
+    ids=[401,402,403,404,405,406,407]
+    
 
     for num in ids:#本当はidがあるかどうかでtryする
-        record=Record.objects.get(id=num)
-        records.append(record)
+        try:
+            record=Record.objects.get(id=num)
+            records.append(record)
+        except ObjectDoesNotExist:
+            return HttpResponse(num)
+
 
     context={"records":records}
     return render(request,'realtime.html',context)
+
 
 
 
@@ -57,15 +60,30 @@ def person_list(request):
         q=''
         
     persons=Person.objects.filter(Q(name__icontains=q))
-    context={'persons':persons}
+    persons_count=persons.count
+    context={'persons':persons,'persons_count':persons_count}
     return render(request,'person_list.html',context)
 
 
-def person_record(request,name):
-    person=Person.objects.get(name=name)
-    records=Record.objects.filter(person=person)
+def person_record(request,name,id):
+    id=int(id)
+    if request.method=='POST':
+        if request.POST.get('delete_person')!=None:
+            person=Person.objects.get(id=id)
+            #削除の時に確認メッセージを入れる
+            person.delete()
+            return redirect('home')
+    person=Person.objects.get(id=id)
+    records=Record.objects.filter(person=person).order_by('-date')
 
-    
+
     context={'records':records,'person':person}
     return render(request,'person_record.html',context)
+
+
+
+def all_records(request):
+    records=Record.objects.all().order_by('-date')
+    context={'records':records}
+    return render(request,'all_records.html',context)
 

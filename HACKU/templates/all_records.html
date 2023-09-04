@@ -1,0 +1,22 @@
+<body>
+    <h3>履歴</h3>
+    <div>
+        <table border="1">
+            <thead>
+                <tr><th>名前</th><th>日付</th></tr>
+            </thead>
+            <tbody>
+                {%for record in records%}
+                <tr>
+                    {%if record.person%}
+                    <td>{{record.person.name}}</td>
+                    {% else %}
+                    <td> DELETED_PERSON </td>
+                    {%endif%}
+                    <td>{{record.date}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</body>

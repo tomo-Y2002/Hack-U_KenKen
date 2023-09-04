@@ -17,6 +17,12 @@ class Record(models.Model):
     person=models.ForeignKey(Person,null=True,on_delete=models.SET_NULL)#Personのデータを削除したらnullとなる
     date=models.DateTimeField(auto_now_add=True)#日付は山さんのデータでもらうかも
 
+    def __str__(self):
+        if self.person!=None:
+            return str(self.id)+str(self.person.name)+str(self.date)
+        else:
+            return str(self.id)+'DELETED_PERSON'+str(self.date)
+
 
 
 

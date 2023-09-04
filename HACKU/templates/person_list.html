@@ -1,15 +1,18 @@
 <body>
     <a href="{%url 'home' %}"><h3>ホームへ</h3></a>
     <h3>登録された人の一覧です。<br>
-    名前をクリックすると履歴を確認できます。</h3><hr>
+    名前をクリックすると個人情報と履歴を確認できます。</h3><hr>
+
     <form method="GET"><!--名前を探す-->
         <input type="text" name="q" placeholder="search name">
         <button>search</button>
     </form>
 
+    <p>{{persons_count}}人見つかりました</p>
+
     <ul>
         {% for person in persons %}
-           <li> <a href="/person_record/{{person.name}}">{{person.name}}</a></li>
+           <li> <a href="/person_record/{{person.name}}id={{person.id}}">{{person.name}}</a></li>
         {% endfor %}
     </ul>
 </body>

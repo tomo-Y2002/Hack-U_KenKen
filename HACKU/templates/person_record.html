@@ -1,17 +1,26 @@
 <body>
+    <a href="{%url 'home' %}"><h3>ホームへ</h3></a>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="delete_person">削除はこちら</label>
+        <button id="delete_person" name="delete_person">削除</button>
+    </form>
+
     <h3>{{person.name}}の履歴です</h3>
     {%if records%}
-    <table border="1">
-        <thead>
-            <tr><th>日付</th></tr>
-        </thead>
-        <tbody>
-            {%for record in records%}
-            <tr><td>{{record.date}}</td></tr>
-            {%endfor%}
-        </tbody>
-    </table>
+        <table border="1">
+            <thead>
+                <tr><th>日付</th></tr>
+            </thead>
+            <tbody>
+                {%for record in records%}
+                <tr><td>{{record.date}}</td></tr>
+                {%endfor%}
+            </tbody>
+        </table>
     {%else%}
-    <p>まだ行動履歴がありません</p>
+        <p>まだ行動履歴がありません</p>
     {% endif %}
+
+
 </body>

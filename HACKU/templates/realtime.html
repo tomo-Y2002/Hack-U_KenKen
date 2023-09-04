@@ -1,6 +1,16 @@
 <body>
-    <h1>realtime</h1>
+    <h1>realtime</h1><hr>
+    <a href="{% url 'home' %}"><h2>ホームへ</h2></a>
     <div name="passed objects container">
-        {{name}}
+        <table border="1">
+            <thead>
+                <tr><th>日付</th><th>名前</th></tr>
+            </thead>
+            <tbody>
+                {% for record in records%}
+                    <tr><td>{{record.date}}</td><td>{{record.person.name}}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>

@@ -5,5 +5,8 @@ urlpatterns=[
 
     path('realtime/',views.realtime,name="realtime"),
 
-    path('person_register',views.person_register,name="person_register"),
+    path('person_register/',views.person_register,name="person_register"),
+
+    path('person_list/',views.person_list,name='person_list'),
+    path('person_record/<str:name>',views.person_record, name='person_record'),
 ]

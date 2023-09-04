@@ -11,6 +11,13 @@ class Person(models.Model):
 
     def __str__(self):
         return self.name
+    
+#通過した時の記録
+class Record(models.Model):
+    person=models.ForeignKey(Person,null=True,on_delete=models.SET_NULL)#Personのデータを削除したらnullとなる
+    date=models.DateTimeField(auto_now_add=True)#日付は山さんのデータでもらうかも
+
+
 
 
 

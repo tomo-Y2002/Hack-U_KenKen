@@ -1,13 +1,12 @@
 <body>
+    <a href="{% url 'home' %}"><h2>ホームへ</h2></a>
     <h2>登録</h2>
     <form method="POST">
         {% csrf_token%}
-        {% for field in form %}
         <div><!--今度直すかも-->
-            <label>{{field.label}}:</label><br>
-            {{field}}
+            <label>名前:</label><br>
+            <input type="text" name="name" placeholder="input your name">
         </div>
-        {% endfor%}
         <button type="submit">提出</button>
     </form>
 </body>

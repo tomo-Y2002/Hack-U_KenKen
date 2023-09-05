@@ -3,13 +3,16 @@
     <div>
         <table border="1">
             <thead>
-                <tr><th>名前</th><th>日付</th></tr>
+                <tr>
+                    <th>名前</th>
+                    <th>日付</th>
+                </tr>
             </thead>
             <tbody>
                 {%for record in records%}
                 <tr>
                     {%if record.person%}
-                    <td>{{record.person.name}}</td>
+                    <td>{{record.person}}</td>
                     {% else %}
                     <td> DELETED_PERSON </td>
                     {%endif%}

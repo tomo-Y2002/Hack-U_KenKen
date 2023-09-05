@@ -5,12 +5,16 @@ from django.db import models
 
 #登録した人の属性
 class Person(models.Model):
-    name = models.CharField(max_length=100,blank=False,null=False)
-    #image=models.ImageField()
+    family_name=models.CharField(max_length=100,null=False,blank=False,default='NO_NAME')
+    first_name=models.CharField(max_length=100,null=False,blank=False,default='NO_NAME')
+    email=models.EmailField(max_length=100,null=False,blank=False,default='no-adress@email.com')
+    birthday=models.DateField(null=True,default=None)
+    registered_date=models.DateTimeField(auto_now_add=True,null=True)
+    image=models.ImageField(upload_to='media/',null=True)
 
 
     def __str__(self):
-        return self.name
+        return self.family_name+' '+self.first_name
     
 #通過した時の記録
 class Record(models.Model):
@@ -19,7 +23,7 @@ class Record(models.Model):
 
     def __str__(self):
         if self.person!=None:
-            return str(self.id)+str(self.person.name)+str(self.date)
+            return str(self.id)+str(self.person)+str(self.date)
         else:
             return str(self.id)+'DELETED_PERSON'+str(self.date)
 

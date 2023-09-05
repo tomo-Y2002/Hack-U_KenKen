@@ -4,5 +4,5 @@ from .models import Person
 class PersonRegistrationForm(ModelForm):
     class Meta:
         model=Person
-        fields=['name']#,'image']
+        fields=['family_name','first_name','email','birthday','image']
 

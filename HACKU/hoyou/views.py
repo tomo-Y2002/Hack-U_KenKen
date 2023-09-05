@@ -16,7 +16,7 @@ def home(request):
 def realtime(request):
     #この関数はまずしっかり出力されるかのテスト用なので後で直す
     records=[]
-    ids=[401,402,403,404,405,406,407]
+    ids=[]
     
 
     for num in ids:#本当はidがあるかどうかでtryする
@@ -37,13 +37,18 @@ def realtime(request):
 def person_register(request):
     form=PersonRegistrationForm()
     if request.method=='POST':
-        form=PersonRegistrationForm(request.POST)
+        form=PersonRegistrationForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save(commit=False)
-            Person.objects.create(
-                name=request.POST.get('name'),
-                #image=request.POST.get('image')
-            )
+            new_person=form.save(commit=False)
+            new_person.save()
+            '''Person.objects.create(
+                family_name=request.POST.get('family_name'),
+                first_name=request.POST.get('first_name'),
+                email=request.POST.get('email'),
+                birthday=request.POST.get('birthday'),
+                image=request.FILES.get('image')
+            )'''
+            
             return redirect('home')
         else:
             messages.error(request, 'An error occurred')
@@ -59,7 +64,7 @@ def person_list(request):
     else:
         q=''
         
-    persons=Person.objects.filter(Q(name__icontains=q))
+    persons=Person.objects.filter(Q(first_name__icontains=q)|Q(family_name__icontains=q))
     persons_count=persons.count
     context={'persons':persons,'persons_count':persons_count}
     return render(request,'person_list.html',context)

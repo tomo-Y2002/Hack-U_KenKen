@@ -16,9 +16,13 @@
         <label for="delete_person ">削除はこちら</label>
         <button id="delete_person " name="delete_person ">削除</button>
     </form>
+    <label for="modify_person ">個人情報の修正はこちら</label>
+    <a href="/person_modify/{{person}}id={{person.id}}"><button id=" modify_person " name="modify_person ">修正</button></a>
 
-    {%if records%}
+
+
     <h3>{{person}}の履歴です。</h3>
+    {%if records%}
     <table border="1 ">
         <thead>
             <tr>

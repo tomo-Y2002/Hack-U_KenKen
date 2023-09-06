@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from .models import Person,Record
-from .forms import PersonRegistrationForm
+from .forms import PersonRegistrationForm,YesNoForm
 from django.db.models import Q
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -72,18 +72,48 @@ def person_list(request):
 
 def person_record(request,name,id):
     id=int(id)
+    person=Person.objects.get(id=id)
     if request.method=='POST':
+        
         if request.POST.get('delete_person')!=None:
-            person=Person.objects.get(id=id)
             #削除の時に確認メッセージを入れる
             person.delete()
             return redirect('home')
-    person=Person.objects.get(id=id)
-    records=Record.objects.filter(person=person).order_by('-date')
+        
 
+    records=Record.objects.filter(person=person).order_by('-date')
 
     context={'records':records,'person':person}
     return render(request,'person_record.html',context)
+
+def person_modify(request,name,id):
+    id=int(id)
+    person=Person.objects.get(id=id)
+    form=YesNoForm()
+    if request.method=='POST':
+        form=YesNoForm(request.POST)
+        if form.is_valid():
+            person.family_name=request.POST.get('family_name')
+            person.first_name=request.POST.get('first_name') 
+            person.email=request.POST.get('email')     
+            person.birthday=request.POST.get('birthday')
+
+            if form.cleaned_data['choice'] == 'no':
+                pass
+            else:
+                #いらない写真を消す機能が必要かも
+                person.image=request.FILES.get('image')
+            person.save()
+
+            records=Record.objects.filter(person=person).order_by('-date')
+            context={'person':person,'records':records}
+
+            return render(request,'person_record.html',context)
+        else:
+            return HttpResponse('form is not valid')
+
+    context={'person':person,'form':form}
+    return render(request,'person_modify.html',context)
 
 
 

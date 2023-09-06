@@ -12,7 +12,7 @@ class Person(models.Model):
     registered_date=models.DateTimeField(auto_now_add=True,null=True)
     image=models.ImageField(upload_to='person_image/',null=True,default=None)
 
-
+    
     def __str__(self):
         return self.family_name+' '+self.first_name
     

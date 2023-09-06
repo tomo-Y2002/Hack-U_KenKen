@@ -122,3 +122,10 @@ def all_records(request):
     context={'records':records}
     return render(request,'all_records.html',context)
 
+
+def delete_modify_records(request):
+
+
+    context={}
+    return render(request,'delete_modify_records.html',context)
+

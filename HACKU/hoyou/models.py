@@ -20,13 +20,27 @@ class Person(models.Model):
 class Record(models.Model):
     person=models.ForeignKey(Person,null=True,on_delete=models.SET_NULL)#Personのデータを削除したらnullとなる
     date=models.DateTimeField(auto_now_add=True)#日付は山さんのデータでもらうかも
+    class Shuttai(models.TextChoices):#出退勤、その他を記録
+        shukkin='shukkin','出勤'
+        taikin='taikin','退勤'
+        sonota='sonota','その他'
+    shuttai=models.CharField(max_length=5,choices=Shuttai.choices)
+
 
     def __str__(self):
         if self.person!=None:
             return str(self.id)+str(self.person)+str(self.date)
         else:
             return str(self.id)+'DELETED_PERSON'+str(self.date)
+        
 
+class ChangeHistory:
+    record=models.ForeignKey(Record ,on_delete=models.SET_DEFAULT, default='DELETED_RECORD')
+    date=models.DateTimeField(auto_now_add=True)
+    
+
+
+    
 
 
 

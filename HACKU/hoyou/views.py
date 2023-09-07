@@ -160,11 +160,20 @@ def all_records(request):
     return render(request,'all_records.html',context)
 
 
+@login_required(login_url='/manager_login')
+def change_records(request,id):
+    id=str(id)
+    record=Record.objects.get(id=id)
+    context={'record':record}
+    return render(request,'change_records.html',context)
+
+
+
 
 @login_required(login_url='/manager_login')
-def delete_modify_records(request):
+def delete_modify_history(request):
 
 
     context={}
-    return render(request,'delete_modify_records.html',context)
+    return render(request,'delete_modify_history.html',context)
 

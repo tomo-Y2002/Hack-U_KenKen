@@ -14,5 +14,6 @@ urlpatterns=[
     path('person_record/<str:name>id=<str:id>/',views.person_record, name='person_record'),
     path('person_modify/<str:name>id=<str:id>/',views.person_modify,name='person_modify'),
     path('all_records/',views.all_records,name='all_records'),
-    path('delete_modify_records/',views.delete_modify_records,name='delete_modify_records'),
+    path('delete_modify_history/',views.delete_modify_history,name='delete_modify_history'),
+    path('change_records/<str:id>',views.change_records,name='change_records'),
 ]

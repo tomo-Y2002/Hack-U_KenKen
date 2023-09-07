@@ -1,0 +1,7 @@
+<body>
+    <a href="{% url 'home' %}">ホームへ</a>
+
+    <label>名前:</label>{{record.person}}<br>
+    <label>種類:</label>{{record.get_shuttai_display}}<br>
+    <label>日時:</label>{{record.date}}<br>
+</body>

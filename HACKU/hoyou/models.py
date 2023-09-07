@@ -48,9 +48,10 @@ class Record(models.Model):
             return str(self.id)+'DELETED_PERSON'+str(self.date)
         
 
-class ChangeHistory:
+class ChangeHistory: #削除と変更を考える
     record=models.ForeignKey(Record ,on_delete=models.SET_DEFAULT, default='DELETED_RECORD')
     date=models.DateTimeField(auto_now_add=True)
+
 
 
 

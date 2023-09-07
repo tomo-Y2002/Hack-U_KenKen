@@ -5,7 +5,11 @@ from .forms import PersonRegistrationForm,YesNoForm
 from django.db.models import Q
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='/manager_login')
 # Create your views here.
 def home(request):
     context={}
@@ -13,7 +17,35 @@ def home(request):
 
 
 
+def manager_login(request):
+    if request.method=='POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')  
+        try:
+            manager=User.objects.get(username=username)
+        except:
+            HttpResponse('user does not exist')
+        manager=authenticate(request,username=username,password=password)
+        if manager is not None:
+            login(request,manager)
+            return redirect('home')
+        else:
+            return HttpResponse('username or password is wrong')          
+    context={}
+    return render(request,'manager_login.html',context)
+
+
+@login_required(login_url='/manager_login')
+def manager_logout(request):
+    logout(request)
+    return redirect('manager_login')
+
+
+
+
+@login_required(login_url='/manager_login')
 def realtime(request):
+
     #この関数はまずしっかり出力されるかのテスト用なので後で直す
     records=[]
     ids=[]
@@ -33,7 +65,7 @@ def realtime(request):
 
 
 
-
+@login_required(login_url='/manager_login')
 def person_register(request):
     form=PersonRegistrationForm()
     if request.method=='POST':
@@ -56,7 +88,7 @@ def person_register(request):
     return render(request,'person_register.html',context)
 
 
-
+@login_required(login_url='/manager_login')
 def person_list(request):
     #id取得用の仮インスタンス
     if request.GET.get('q')!=None:
@@ -70,6 +102,8 @@ def person_list(request):
     return render(request,'person_list.html',context)
 
 
+
+@login_required(login_url='/manager_login')
 def person_record(request,name,id):
     id=int(id)
     person=Person.objects.get(id=id)
@@ -86,6 +120,9 @@ def person_record(request,name,id):
     context={'records':records,'person':person}
     return render(request,'person_record.html',context)
 
+
+
+@login_required(login_url='/manager_login')
 def person_modify(request,name,id):
     id=int(id)
     person=Person.objects.get(id=id)
@@ -116,13 +153,15 @@ def person_modify(request,name,id):
     return render(request,'person_modify.html',context)
 
 
-
+@login_required(login_url='/manager_login')
 def all_records(request):
     records=Record.objects.all().order_by('-date')
     context={'records':records}
     return render(request,'all_records.html',context)
 
 
+
+@login_required(login_url='/manager_login')
 def delete_modify_records(request):
 
 

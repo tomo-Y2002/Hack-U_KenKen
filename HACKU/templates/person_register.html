@@ -7,11 +7,10 @@
         {% csrf_token%}
         <div>
             <!--今度直すかも-->
-            <label>名字:</label> <input type="text" name="family_name"> <label>名前:</label> <input type="'text" name="first_name"> <br>
+            <label>名字:</label> <input type="text" name="family_name"> <label>名前:</label> <input type="text" name="first_name"> <br>
             <label>メールアドレス:</label> <input type="email" name="email"><br>
             <label>誕生日:</label>
             <input type="date" name="birthday"><br>
-            <label>写真を変更しますか?</label><br>{{form.as_p}}<br>
             <input type="file" name="image" accept=image/*><br>
             <button type=" submit ">提出</button>
         </div>

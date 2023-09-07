@@ -3,6 +3,8 @@ from .models import Person
 from django import forms
 
 
+
+
 class PersonRegistrationForm(ModelForm):
     class Meta:
         model=Person

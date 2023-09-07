@@ -1,0 +1,8 @@
+<body>
+    <form method="POST">
+        {% csrf_token%}
+        <label>ユーザーネーム:</label><input type="text" name="username"><br>
+        <label>パスワード:</label> <input type="password" name="password"><br>
+        <button type="submit">ログイン</button>
+    </form>
+</body>

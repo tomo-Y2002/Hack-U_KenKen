@@ -1,6 +1,20 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
 
 # Create your models here.
+'''class Manager(AbstractBaseUser):
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    #password
+    #last_login
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    def __str__(self):
+        return self.username'''
 
 
 #登録した人の属性
@@ -24,7 +38,7 @@ class Record(models.Model):
         shukkin='shukkin','出勤'
         taikin='taikin','退勤'
         sonota='sonota','その他'
-    shuttai=models.CharField(max_length=5,choices=Shuttai.choices)
+    shuttai=models.CharField(max_length=10,choices=Shuttai.choices,default=Shuttai.sonota)
 
 
     def __str__(self):
@@ -37,7 +51,7 @@ class Record(models.Model):
 class ChangeHistory:
     record=models.ForeignKey(Record ,on_delete=models.SET_DEFAULT, default='DELETED_RECORD')
     date=models.DateTimeField(auto_now_add=True)
-    
+
 
 
     

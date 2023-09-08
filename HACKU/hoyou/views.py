@@ -156,6 +156,7 @@ def person_modify(request,name,id):
 @login_required(login_url='/manager_login')
 def all_records(request):
     records=Record.objects.all().order_by('-date')
+            
     context={'records':records}
     return render(request,'all_records.html',context)
 
@@ -164,7 +165,24 @@ def all_records(request):
 def change_records(request,id):
     id=str(id)
     record=Record.objects.get(id=id)
-    context={'record':record}
+    persons=Person.objects.all()
+    if request.method=="POST":
+        if request.POST.get('change')!=None:
+            new_person_id=int(request.POST.get('person'))
+            try:
+                new_person=Person.objects.get(id=new_person_id)
+            except:
+                HttpResponse('person does not exist')
+            new_shuttai=request.POST.get('shuttai')
+            record.person=new_person
+            record.shuttai=new_shuttai
+            record.save()
+            return redirect('all_records')
+        elif request.POST.get('delete')!=None:
+            record.delete()
+            return redirect('all_records')
+    
+    context={'record':record,'persons':persons}
     return render(request,'change_records.html',context)
 
 
@@ -172,8 +190,6 @@ def change_records(request,id):
 
 @login_required(login_url='/manager_login')
 def delete_modify_history(request):
-
-
     context={}
     return render(request,'delete_modify_history.html',context)
 

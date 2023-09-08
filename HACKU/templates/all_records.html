@@ -6,16 +6,15 @@
     <table border="1">
         <thead>
             <tr>
-                <th></th>
                 <th>名前</th>
                 <th>種類</th>
                 <th>日付</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {%for record in records%}
             <tr>
-                <td><a href="/change_records/{{record.id}}"><button>変更</button></a></td>
                 {%if record.person%}
                 <td>{{record.person}}</td>
                 {% else %}
@@ -23,6 +22,7 @@
                 {%endif%}
                 <td>{{record.get_shuttai_display}}</td>
                 <td>{{record.date}}</td>
+                <td><a href="/change_records/{{record.id}}"><button>変更、削除</button></a></td>
             </tr>
             {%endfor%}
         </tbody>

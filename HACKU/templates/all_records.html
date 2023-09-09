@@ -4,6 +4,24 @@
     </a>
     <h3>履歴</h3>
     <a href="{% url 'add_records' %}"><h4>履歴の作成はこちら</h4></a>
+    <form method="GET" name="condition">
+        <label>名前</label>
+        <input type="text" name="q" placeholder="search name"><br>
+        <label>種類</label>
+        <select name="shuttai">
+            <option value="shukkin" >出勤</option>
+            <option value="taikin" >退勤</option>
+            <option value="sonota" >その他</option>
+            <option value="no_selection" selected="selected">指定しない</option>
+        </select><br>
+        <label>期間</label>
+        <input type="date" name="start_date">
+        <input type="time" name="start_time">~
+        <input type="date" name="end_date">
+        <input type="time" name="end_time"><br>
+
+        <button name="search">search</button>
+    </form>
     <table border="1">
         <thead>
             <tr>

@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from .models import Person,Record
 from .forms import PersonRegistrationForm,YesNoForm
+from .functions import get_datetime
 from django.db.models import Q
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -173,8 +174,36 @@ def person_modify(request,name,id):
 
 @login_required(login_url='/manager_login')
 def all_records(request):
-    records=Record.objects.all().order_by('-date')
-            
+    if request.GET.get('search')!=None:
+        if request.GET.get('q')!=None:
+            q=request.GET.get('q')
+        else:
+            q=''
+        q_condition=Q(first_name__icontains=q)|Q(family_name__icontains=q)
+        persons=Person.objects.filter(q_condition)
+        person_condition= Q(person__in=persons)
+        shuttai=request.GET.get('shuttai')
+        if shuttai!='no_choice':
+            shuttai_condition= Q(shuttai=shuttai)
+        else:
+            shuttai_condition=Q(shuttai__icontains='')
+
+        start_date = request.GET.get('start_date') if request.POST.get('start_date')!=None else "2000-01-01"
+        start_time = request.GET.get('start_time') if request.POST.get('start_time')!=None else "00:00"
+        start_datetime=get_datetime(start_date,start_time)
+        if request.POST.get('end_date')!=None:
+            end_date = request.GET.get('end_date') 
+        else:
+            end_datetime=datetime.now()
+            end_date=end_datetime.date()
+            end_date=end_date.strftime('%Y-%m-%d')
+        end_time = request.GET.get('start_time') if request.POST.get('start_time')!=None else "23:59"
+        end_datetime=get_datetime(end_date,end_time)
+        print(start_datetime,end_datetime)
+        datetime_condition=Q(date__gte=start_datetime)&Q(date__lte=end_datetime)
+        records=Record.objects.filter(person_condition & shuttai_condition & datetime_condition)
+    else:
+        records=Record.objects.all().order_by('-date')
     context={'records':records}
     return render(request,'all_records.html',context)
 
@@ -227,4 +256,13 @@ def add_records(request):
 def delete_modify_history(request):
     context={}
     return render(request,'delete_modify_history.html',context)
+
+
+
+
+
+
+
+
+
 

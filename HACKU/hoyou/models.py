@@ -19,7 +19,7 @@ from django.contrib.auth.models import AbstractBaseUser
 
 #登録した人の属性
 class Person(models.Model):
-    family_name=models.CharField(max_length=100,null=False,blank=False,default='NO_NAME',unique=True)
+    family_name=models.CharField(max_length=100,null=False,blank=False,default='NO_NAME')
     first_name=models.CharField(max_length=100,null=False,blank=False,default='NO_NAME')
     email=models.EmailField(max_length=100,null=False,blank=False,default='no-adress@email.com')
     birthday=models.DateField(null=True,default=None)

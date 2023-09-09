@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
 @login_required(login_url='/manager_login')
-# Create your views here.
 def home(request):
     context={}
     return render(request,'home.html',context)
@@ -41,7 +40,25 @@ def manager_logout(request):
     logout(request)
     return redirect('manager_login')
 
+def manager_register(request):
+    if request.method=='POST':
+        username=request.POST.get('username')
+        email=request.POST.get('email')
+        password1=request.POST.get('password1')
+        password2=request.POST.get('password2')
+        if username==None or email==None or password1==None or password2==None:
+            return HttpResponse('fill all fields')
+        elif password1!=password2:
+            return HttpResponse('password does not match')
+        
+        password=password1
+        manager=User.objects.create(username=username,email=email,password=password)
 
+        login(request,manager)
+        return redirect('home')
+
+    context={}
+    return render(request,'manager_register.html',context)
 
 
 @login_required(login_url='/manager_login')
@@ -51,7 +68,6 @@ def realtime(request):
     records=[]
     ids=[]
     
-
     for num in ids:#本当はidがあるかどうかでtryする
         try:
             record=Record.objects.get(id=num)

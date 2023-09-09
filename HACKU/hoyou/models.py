@@ -33,7 +33,7 @@ class Person(models.Model):
 #通過した時の記録
 class Record(models.Model):
     person=models.ForeignKey(Person,null=True,on_delete=models.SET_NULL)#Personのデータを削除したらnullとなる
-    date=models.DateTimeField(auto_now_add=True)#日付は山さんのデータでもらうかも
+    date=models.DateTimeField()#日付は山さんのデータでもらうかも
     class Shuttai(models.TextChoices):#出退勤、その他を記録
         shukkin='shukkin','出勤'
         taikin='taikin','退勤'

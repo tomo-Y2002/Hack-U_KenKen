@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 @login_required(login_url='/manager_login')
 # Create your views here.
@@ -113,7 +114,6 @@ def person_record(request,name,id):
             #削除の時に確認メッセージを入れる
             person.delete()
             return redirect('home')
-        
 
     records=Record.objects.filter(person=person).order_by('-date')
 
@@ -153,6 +153,8 @@ def person_modify(request,name,id):
     return render(request,'person_modify.html',context)
 
 
+
+
 @login_required(login_url='/manager_login')
 def all_records(request):
     records=Record.objects.all().order_by('-date')
@@ -184,6 +186,23 @@ def change_records(request,id):
     
     context={'record':record,'persons':persons}
     return render(request,'change_records.html',context)
+
+@login_required(login_url='/manager_login')
+def add_records(request):
+    persons=Person.objects.all()
+    if request.method=='POST':
+        id=int(request.POST.get('person'))
+        person=Person.objects.get(id=id)
+        shuttai=request.POST.get('shuttai')
+        date_str = request.POST.get('date')
+        time_str = request.POST.get('time')
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')  # 日付のフォーマットに合わせる
+        time_obj = datetime.strptime(time_str, '%H:%M')  # 時間のフォーマットに合わせる
+        combined_datetime = datetime.combine(date_obj.date(), time_obj.time())
+        Record.objects.create(person=person,shuttai=shuttai,date=combined_datetime)
+        return redirect('all_records')
+    context={'persons':persons}
+    return render(request,'add_records.html',context)
 
 
 

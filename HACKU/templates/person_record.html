@@ -27,12 +27,14 @@
         <thead>
             <tr>
                 <th>日付</th>
+                <th>種類</th>
             </tr>
         </thead>
         <tbody>
             {%for record in records%}
             <tr>
                 <td>{{record.date}}</td>
+                <td>{{record.get_shuttai_display}}</td>
             </tr>
             {%endfor%}
         </tbody>

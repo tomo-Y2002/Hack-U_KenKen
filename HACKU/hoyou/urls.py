@@ -16,4 +16,6 @@ urlpatterns=[
     path('all_records/',views.all_records,name='all_records'),
     path('delete_modify_history/',views.delete_modify_history,name='delete_modify_history'),
     path('change_records/<str:id>',views.change_records,name='change_records'),
+    path('add_records',views.add_records,name='add_records'),
+
 ]

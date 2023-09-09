@@ -1,0 +1,23 @@
+<body>
+    <form method="POST">
+        {% csrf_token%}
+        <label>人:</label>
+        <select name="person">
+            {% for person in persons %} 
+            <option value="{{person.id}}" >{{person}}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label>種類:</label>
+        <select name="shuttai">
+            <option value="shukkin" >出勤</option>
+            <option value="taikin" >退勤</option>
+            <option value="sonota" >その他</option>
+        </select><br>
+        <label>日付：</label><input type="date" name="date"><br>
+        <label>時間：</label><input type="time" name="time">
+        <br>
+        <button type="submit" >登録</button>
+    </form>
+</body>

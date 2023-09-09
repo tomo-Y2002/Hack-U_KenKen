@@ -183,7 +183,7 @@ def all_records(request):
         persons=Person.objects.filter(q_condition)
         person_condition= Q(person__in=persons)
         shuttai=request.GET.get('shuttai')
-        if shuttai!='no_choice':
+        if shuttai!='no_selection':
             shuttai_condition= Q(shuttai=shuttai)
         else:
             shuttai_condition=Q(shuttai__icontains='')
@@ -204,7 +204,8 @@ def all_records(request):
         records=Record.objects.filter(person_condition & shuttai_condition & datetime_condition)
     else:
         records=Record.objects.all().order_by('-date')
-    context={'records':records}
+    records_count=records.count()
+    context={'records':records,'records_count':records_count}
     return render(request,'all_records.html',context)
 
 

@@ -4,6 +4,7 @@
     </a>
     <h3>履歴</h3>
     <a href="{% url 'add_records' %}"><h4>履歴の作成はこちら</h4></a>
+    <p>条件の絞り込み</p>
     <form method="GET" name="condition">
         <label>名前</label>
         <input type="text" name="q" placeholder="search name"><br>
@@ -22,6 +23,8 @@
 
         <button name="search">search</button>
     </form>
+
+    <p>{{records_count}}件の履歴が見つかりました</p>
     <table border="1">
         <thead>
             <tr>

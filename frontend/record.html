@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" >
+        <link rel="stylesheet" href="recordStyles.css" />
+        <title>歩容認証記録</title>
+
+    </head>
+    <body class="record-body">
+        <header class="record-header">
+            <a href='./camera.html' class="home">元の画面に戻る</a>
+        </header>
+        <main class="record-main">
+            <h1>認証記録</h1>
+            <table id="record-table">
+            <tr>
+                <th>通過日時</th>
+                <th>名前</th>
+            </tr>
+        </table>
+        <script src="record.js"></script>
+        <!-- <script>appendRecord([1,2])</script> -->
+        </main>
+        <footer>
+            <form method="" action="" onsubmit="return deleteCheck()">
+                <p><input class="deleteButton"  type="submit" value="履歴削除"></p>
+            </form>
+            <script>
+                function deleteCheck(){
+                    if(window.confirm('履歴を削除しますか?')){
+                        window.location.reload();
+                        return true;
+                    }
+                    else{
+                        // window.alert('キャンセル');
+                        return false;
+                    }
+                }
+                </script>
+        </footer>
+    </body>
+    </html>

@@ -1,0 +1,10 @@
+.camera{
+    width: 50%;
+    margin: 100px auto;
+    max-width: 500pxs;
+}
+
+.menu{
+    display: flex;
+    justify-content: space-around;   
+}

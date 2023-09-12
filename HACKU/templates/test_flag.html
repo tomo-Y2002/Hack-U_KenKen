@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Realtime Clock</title>
+</head>
+<body>
+    <h1>Realtime Clock</h1>
+    <p id="clock"></p>
+
+    <script>
+        const clockElement = document.getElementById('clock');
+        const eventSource = new EventSource('/test_flag/');
+
+        eventSource.onmessage = (event) => {
+            const currentTime = event.data;
+            clockElement.innerText = `Current Time: ${currentTime}`;
+        };
+
+        eventSource.onerror = (error) => {
+            console.error('EventSource failed:', error);
+            eventSource.close();
+        };
+    </script>
+</body>
+</html>

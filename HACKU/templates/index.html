@@ -1,0 +1,36 @@
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css" >
+</head>
+<body>
+    <iframe id="capture-view" src="./capture"></iframe>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="start">開始</button>
+    </form>
+
+
+    <iframe id="clockFrame" name="clockFrame" src="about:blank" width="400" height="100"></iframe>
+    <script>
+        const clockLink = document.getElementById('clockLink');
+        const iframe = document.getElementById('clockFrame');
+        const updateInterval = 1000;  // ミリ秒単位の更新間隔
+
+        function updateIframe() {
+            iframe.src = './test_flag';  // DjangoビューのURLに設定
+            iframe.addEventListener('click', function () {
+                // ボタンをクリックしたようにDjangoビューを呼び出す
+                window.location.href = './test_register';
+            });
+        }
+        setInterval(updateIframe, updateInterval);
+    </script>
+    {%for person in persons%}
+    <tr>
+        <button type="submit" name="register">{{ person.family_name }}</button>
+    </tr>
+    {%endfor%}
+</body>
+</html>

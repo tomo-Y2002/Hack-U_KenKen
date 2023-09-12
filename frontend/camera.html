@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEBカメラの映像を表示</title>
+    <link rel="stylesheet" href="cameraStyles.css">
+  </head>
+  <body>
+    <header class="menu">
+        <a href="#">新規登録</a>
+        <a href="./record.html">履歴<a>
+    </header>
+    <main>
+    <div>   
+        <video id="video" class="camera"></video>
+    </div>
+    <script>
+      const video = document.getElementById('video');
+      navigator.mediaDevices
+        .getUserMedia({
+          video: true,
+          audio: false,
+        })
+        .then((stream) => {
+          video.srcObject = stream;
+          video.play();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    </script>
+    </main>
+  </body>
+</html>

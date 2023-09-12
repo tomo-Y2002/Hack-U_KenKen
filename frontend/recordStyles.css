@@ -1,0 +1,47 @@
+table{
+    margin: auto;
+    border-collapse: collapse;
+}
+
+td,
+th{
+    border: solid 1px gray;
+    border-collapse: collapse;
+    padding: 5px 10px;
+}
+
+th{
+    background-color: lightgray;
+}
+
+.deleteButton{
+    background-color: red;
+    color: white;
+    border: none;
+    margin: 10vh 50px;
+    position:  absolute;        /* 要素の配置方法を指定 */
+    right:  50px;                /* 右からの位置指定 */
+    top: 80vh;                  /* 上からの位置指定 */
+}
+
+input:hover{
+    background-color: rgb(233, 233, 100);
+}
+
+.home{
+    float: right;
+}
+
+.record-header{
+    text-align: right;
+}
+
+.record-main{
+    display: flex;
+    flex-direction: column;
+    margin: 1vh;
+}
+
+h1{
+    text-align: center;
+}

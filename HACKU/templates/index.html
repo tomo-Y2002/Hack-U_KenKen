@@ -8,7 +8,8 @@
     <iframe id="capture-view" src="./capture"></iframe>
     <form method="post">
         {% csrf_token %}
-        <button type="submit" name="start">開始</button>
+        <button type="submit" name="savefig">写真保存</button>
+        <button type="submit" name="savevid">動画保存</button>
     </form>
 
 
@@ -27,10 +28,5 @@
         }
         setInterval(updateIframe, updateInterval);
     </script>
-    {%for person in persons%}
-    <tr>
-        <button type="submit" name="register">{{ person.family_name }}</button>
-    </tr>
-    {%endfor%}
 </body>
 </html>

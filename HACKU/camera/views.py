@@ -10,8 +10,9 @@ from collections import deque
 from hoyou.models import Person
 import time
 from django.utils.timezone import now
+import copy
 
-buffer = deque([], maxlen=100)
+buffer = deque(maxlen=1000)
 flag = False
 class VideoCamera(object):
     def __init__(self):
@@ -21,17 +22,15 @@ class VideoCamera(object):
         self.video.release()
 
     def get_frame(self):
+        global buffer
         success, image = self.video.read()
         ret, jpeg = cv2.imencode('.jpg', image)
+        buffer.append(image)
         return jpeg.tobytes()
 
 def gen(camera):
     while True:
         frame = camera.get_frame()
-        buffer.append(frame)
-        if(len(buffer) == 100):
-            flag = True
-            HttpResponse("Hello, World")
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -40,16 +39,20 @@ def tm():
         yield str(time.time_ns())
 
 def index(request):
+    global buffer
     if(len(buffer)):
         if request.method == "POST":
-            if "start" in request.POST:
-                frame = np.frombuffer(buffer.pop(), np.uint8)
-                jpeg = cv2.imdecode(frame, cv2.IMREAD_UNCHANGED)
-                cv2.imwrite(str(BASE_DIR)+"/media/test/myjpeg.jpg", jpeg)
-    if(len(buffer) >= 99):
-        return render(request ,'index.html', context={"persons":Person.objects.all()})
-    else:
-        return render(request ,'index.html')
+            if "savefig" in request.POST:
+                cv2.imwrite(str(BASE_DIR)+"/media/test/myfig.jpg", buffer[-1])
+            if "savevid" in request.POST:
+                frames = copy.copy(buffer)
+                fps = 30
+                h, w = frames[0].shape[:2]
+                fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+                writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
+                for frame in frames:
+                    writer.write(frame)
+    return render(request ,'index.html')
 
 @ gzip.gzip_page
 @ xframe_options_exempt
@@ -59,9 +62,15 @@ def capture(request):
 @ xframe_options_exempt
 def test_flag(request):
     def event_stream():
+        global flag
         while True:
             current_time = now().strftime("%Y-%m-%d %H:%M:%S")
-            yield f"data: {current_time}\n\n"  # リアルタイムデータをストリームとして送信
+            if(now().second < 30):  
+                flag = True
+                yield f"data: {current_time}\n\n"  # リアルタイムデータをストリームとして送信
+            else:
+                flag = False
+                yield ""
             time.sleep(1)  # 1秒ごとに更新
 
     response = StreamingHttpResponse(event_stream(), content_type="text/event-stream")
@@ -69,6 +78,9 @@ def test_flag(request):
     return response
 
 def test_register(request):
+    global flag
     print("pushed")
-    return index(request)
-    # return HttpResponse("ok")
+    if(flag):
+        return HttpResponse("ok")
+    else:
+        return index(request)

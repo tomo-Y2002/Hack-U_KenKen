@@ -3,7 +3,7 @@
 import os
 import ultralytics
 from ultralytics import YOLO
-from google.colab.patches import cv2_imshow
+# from google.colab.patches import cv2_imshow
 from PIL import Image 
 import torch
 import matplotlib.pyplot as plt

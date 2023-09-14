@@ -29,3 +29,21 @@ rm -r {HOME}/my_predict/labels
 #### 今後の変更
 ・　入力をカメラ直結にする(バックエンドと要相談)  
 ・　処理の高速化
+
+
+## HumanInFrame.py
+人間がフレーム中にいるかどうかを返す関数
+```
+def HumanInFrame(frame:np.array)->bool:
+```
+#### 引数
+**frame**  np.array: cv2でフレームを取得した結果を入力として利用可能
+
+#### 返値
+bool : 人がいたらTrue, いなかったらFalse
+
+#### 注意
+単純な実装なので、顔だけ写っていてもconfidenceが0.5以上なら人間と判断されるので、
+結構敏感かも
+敏感すぎたら、conf = 0.5の所を0.8とか0.9とかにしてもよいかも
+

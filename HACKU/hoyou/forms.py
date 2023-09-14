@@ -1,14 +1,8 @@
-from django.forms import ModelForm,Form
-from .models import Person
+from django.forms import Form
 from django import forms
 
 
 
-
-class PersonRegistrationForm(ModelForm):
-    class Meta:
-        model=Person
-        fields=['family_name','first_name','email','birthday','image']
 
 
 

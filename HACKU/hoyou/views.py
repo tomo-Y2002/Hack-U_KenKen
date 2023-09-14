@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from .models import Person,Record
-from .forms import PersonRegistrationForm,YesNoForm
+from .forms import YesNoForm
 from .functions import get_datetime
 from django.db.models import Q
 from django.http import HttpResponse
@@ -85,24 +85,15 @@ def realtime(request):
 
 @login_required(login_url='/manager_login')
 def person_register(request):
-    form=PersonRegistrationForm()
     if request.method=='POST':
-        form=PersonRegistrationForm(request.POST,request.FILES)
-        if form.is_valid():
-            new_person=form.save(commit=False)
-            new_person.save()
-            '''Person.objects.create(
-                family_name=request.POST.get('family_name'),
-                first_name=request.POST.get('first_name'),
-                email=request.POST.get('email'),
-                birthday=request.POST.get('birthday'),
-                image=request.FILES.get('image')
-            )'''
-            
-            return redirect('home')
-        else:
-            messages.error(request, 'An error occurred')
-    context={'form':form}
+        family_name=request.POST.get('family_name')
+        first_name=request.POST.get('first_name')
+        email=request.POST.get('email')
+        birthday=request.POST.get('birthday')
+        image=request.FILES.get('image')
+        context={}
+        return render(request,'hoyou_register.html',context)
+    context={}
     return render(request,'person_register.html',context)
 
 

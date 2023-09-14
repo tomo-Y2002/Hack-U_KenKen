@@ -1,21 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from picklefield.fields import PickledObjectField
 
 # Create your models here.
-'''class Manager(AbstractBaseUser):
-    username = models.CharField(max_length=150, unique=True)
-    email = models.EmailField(unique=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    #password
-    #last_login
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
-
-    def __str__(self):
-        return self.username'''
-
 
 #登録した人の属性
 class Person(models.Model):
@@ -25,6 +11,7 @@ class Person(models.Model):
     birthday=models.DateField(null=True,default=None)
     registered_date=models.DateTimeField(auto_now_add=True,null=True)
     image=models.ImageField(upload_to='person_image/',null=True,default=None)
+    vector=PickledObjectField(null=True,blank=True)
 
     
     def __str__(self):

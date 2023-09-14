@@ -84,3 +84,20 @@ def test_register(request):
         return HttpResponse("ok")
     else:
         return index(request)
+    
+def hoyou_register(request):
+    global buffer
+    if(len(buffer)):
+        if request.method == "POST":
+            if "savefig" in request.POST:
+                cv2.imwrite(str(BASE_DIR)+"/media/test/myfig.jpg", buffer[-1])
+            if "savevid" in request.POST:
+                frames = copy.copy(buffer)
+                fps = 30
+                h, w = frames[0].shape[:2]
+                fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+                writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
+                for frame in frames:
+                    writer.write(frame)
+            return render(request ,'home.html')
+    return render(request,'hoyou_register.html')

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     'hoyou.apps.HoyouConfig',
     'camera',
+    'picklefield',
 ]
 
 MIDDLEWARE = [

@@ -1,53 +1,103 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>履歴の作成</title>
+</head>
 <body>
-    <a href="{%url 'home' %}">
-        <h3>ホームへ</h3>
+    <nav class="navbar bg-warning">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">GatePass</span>
+            <a href="{% url 'home' %}">home</a>
+        </div>
+    </nav>
+    <div class="row mx-auto mt-4" style="width: 50%; text-align: center;">
+        <h2>出退勤履歴の編集</h2>
+    </div>
+    <a href="{% url 'add_records' %}" class="row mx-auto mt-4" style="width: 25%;">
+        <p style="text-align: center;">
+            新しく履歴を作成する場合はこちら
+        </p>
     </a>
-    <h3>履歴</h3>
-    <a href="{% url 'add_records' %}"><h4>履歴の作成はこちら</h4></a>
-    <p>条件の絞り込み</p>
-    <form method="GET" name="condition">
-        <label>名前</label>
-        <input type="text" name="q" placeholder="search name"><br>
-        <label>種類</label>
-        <select name="shuttai">
-            <option value="shukkin" >出勤</option>
-            <option value="taikin" >退勤</option>
-            <option value="sonota" >その他</option>
-            <option value="no_selection" selected="selected">指定しない</option>
-        </select><br>
-        <label>期間</label>
-        <input type="date" name="start_date">
-        <input type="time" name="start_time">~
-        <input type="date" name="end_date">
-        <input type="time" name="end_time"><br>
-
-        <button name="search">search</button>
-    </form>
-
-    <p>{{records_count}}件の履歴が見つかりました</p>
-    <table border="1">
-        <thead>
+    <div class="row d-grid gap-0.1 col-3 mx-auto mt-4">
+        <p style="text-align: left; font-size: large;"><条件の絞り込み></p>
+        <form method="GET" name="condition">
+            <div class="row mb-2">
+                <label class="col-sm-2 col-form-label-sm">名前</label>
+                <div class="col-sm-10">
+                    <input type="text" name="q" class="form-control form-control-sm" placeholder="名前を入力して下さい">
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-sm-2 col-form-label-sm">種類</label>
+                <div class="col-sm-10">
+                    <select name="shuttai" class="form-select form-select-sm">
+                        <option value="shukkin" >出勤</option>
+                        <option value="taikin" >退勤</option>
+                        <option value="sonota" >その他</option>
+                        <option value="no_selection" selected="selected">指定しない</option>
+                    </select>
+                </div>
+            </div>    
+            <div class="row mb-2">
+                <label class="col-sm-2 col-form-label-sm">期間</label>
+                <div class="col-sm-4">
+                    <input type="date" name="start_date" class="form-control form-control-sm">
+                </div>    
+                <label class="col-sm-1 col-form-label-sm">の</label>
+                <div class="col-sm-4">
+                    <input type="time" name="start_time" class="form-control form-control-sm">
+                </div>        
+            </div>
+            <div class="row mx-auto">
+                <div class="col-sm-6"></div>
+                <label class="col-sm col-form-label-sm">から</label>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-4">
+                    <input type="date" name="end_date" class="form-control form-control-sm">
+                </div>    
+                <label class="col-sm-1 col-form-label-sm">の</label>
+                <div class="col-sm-4">
+                    <input type="time" name="end_time" class="form-control form-control-sm">
+                </div>
+            </div>
+        </form>
+        <button name="search" class="btn btn-outline-dark">検索</button>
+    </div>
+    <div class="mx-auto mt-4" style="width: 500px; text-align: center;">
+        <p>{{records_count}}件の履歴が見つかりました</p>
+    </div>
+    <table class="mx-auto table-bordered" style="border-color: black; width: 40%;">
+        <thead style="background-color: rgb(199, 193, 193);">
             <tr>
-                <th>名前</th>
-                <th>種類</th>
-                <th>日付</th>
-                <th></th>
+                <th style="text-align: center;">名前</th>
+                <th style="text-align: center;">種類</th>
+                <th style="text-align: center;">日付</th>
+                <th style="text-align: center;">操作</th>
             </tr>
         </thead>
         <tbody>
             {%for record in records%}
             <tr>
                 {%if record.person%}
-                <td>{{record.person}}</td>
+                <td style="text-align: center;">{{record.person}}</td>
                 {% else %}
-                <td> DELETED_PERSON </td>
+                <td style="text-align: center;"> DELETED_PERSON </td>
                 {%endif%}
-                <td>{{record.get_shuttai_display}}</td>
-                <td>{{record.date}}</td>
-                <td><a href="/change_records/{{record.id}}"><button>変更、削除</button></a></td>
+                <td style="text-align: center;">{{record.get_shuttai_display}}</td>
+                <td style="text-align: center;">{{record.date}}</td>
+                <td style="text-align: center;">
+                    <a href="/change_records/{{record.id}}">
+                        <button class="btn btn-outline-dark">
+                            変更または削除
+                        </button>
+                    </a>
+                </td>
             </tr>
             {%endfor%}
         </tbody>
     </table>
-    </div>
 </body>
+

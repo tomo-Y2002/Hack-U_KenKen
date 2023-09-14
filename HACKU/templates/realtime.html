@@ -17,7 +17,7 @@
                 {% for record in records%}
                 <tr>
                     <td>{{record.date}}</td>
-                    <td>{{record.shuttai}}</td>
+                    <td>{{record.get_shuttai_display}}</td>
                     <td>{{record.person}}</td>
                 </tr>
                 {% endfor %}

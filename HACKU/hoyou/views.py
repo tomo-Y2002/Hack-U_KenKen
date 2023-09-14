@@ -107,12 +107,10 @@ def person_record(request,name,id):
     id=int(id)
     person=Person.objects.get(id=id)
     if request.method=='POST':
-        
         if request.POST.get('delete_person')!=None:
-            #削除の時に確認メッセージを入れる
+            #削除の時に確認メッセージを入れるべき
             person.delete()
             return redirect('home')
-
     records=Record.objects.filter(person=person).order_by('-date')
 
     context={'records':records,'person':person}

@@ -9,12 +9,14 @@
     <p>{{person.email}}</p><br>
     <label>誕生日</label>
     <p>{{person.birthday}}</p><br>
+    {% if person.image %}
     <label>写真</label>
-    <img src="{{person.image.url}}" alt=""><br>
-    <form method=" POST ">
+    <img src="{{person.image.url}}" ><br>
+    {% endif %}
+    <form method="POST">
         {% csrf_token %}
-        <label for="delete_person ">削除はこちら</label>
-        <button id="delete_person " name="delete_person ">削除</button>
+        <label for="delete_person">削除はこちら</label>
+        <button id="delete_person" name="delete_person">削除</button>
     </form>
     <label for="modify_person ">個人情報の修正はこちら</label>
     <a href="/person_modify/{{person}}id={{person.id}}"><button id=" modify_person " name="modify_person ">修正</button></a>

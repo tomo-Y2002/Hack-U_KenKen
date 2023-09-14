@@ -6,16 +6,19 @@ import cv2
 import numpy as np
 from HACKU.settings import BASE_DIR
 from collections import deque
-from hoyou.models import Person
+from hoyou.models import Person, Record, Shuttai
 import time
 from django.utils.timezone import now
 import copy
 import base64
 from django.core.files.base import ContentFile
 from video2vec import HumanInFrame, video2vec
+import hoyou.views
+from hoyou import functions
 
 buffer = deque(maxlen=1000)
-flag = False
+flag = None
+count = 0
 class VideoCamera(object):
     def __init__(self):
         self.video = cv2.VideoCapture(0)
@@ -25,9 +28,29 @@ class VideoCamera(object):
 
     def get_frame(self):
         global buffer
+        global flag
+        global count
         success, image = self.video.read()
         ret, jpeg = cv2.imencode('.jpg', image)
         buffer.append(image)
+        if(flag == "main" and count%30 == 0 and len(buffer) > 60):
+            frames = copy.copy(buffer[-60:-1])
+            if(HumanInFrame.HumanInFrame(frames[30])):
+                fps = 30
+            h, w = frames[0].shape[:2]
+            fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+            writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
+            for frame in frames:
+                writer.write(frame)
+            vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/video2vec/model_0.832.pth")
+            id = functions.inner_product(vector)
+            person=Person.objects.get(id=id)
+            newest=Record.objects.filter(person=person)
+            if(not newest.exists()):
+                shuttai = Shuttai.shukkin if newest.last().shuttai == Shuttai.taikin else Shuttai.taikin if newest.last().shuttai == Shuttai.shukkin else Shuttai.shukkin
+            else:
+                shuttai = Shuttai.shukkin
+            functions.create_record(id, shuttai)
         return jpeg.tobytes()
 
 def gen(camera):
@@ -86,6 +109,9 @@ def test_register(request):
     
 def hoyou_register(request):
     global buffer
+    global flag
+    global count
+    flag = "hoyou_register"
     if request.method == "POST":
         if "next" in request.POST:
             frames = copy.copy(buffer)
@@ -98,14 +124,25 @@ def hoyou_register(request):
             vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/video2vec/model_0.832.pth")
             binary_data = request.session["image"]  # クライアントからのデータを取得
             image_data = base64.b64decode(binary_data.split(',')[1])  # Data URIをデコード
-            image = ContentFile(image_data, name='image.jpg')
+            image = ContentFile(image_data, name=request.session["family_name"]+request.session["first_name"]+request.session["birthday"]+'.jpg')
             test_person = Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
             buffer.clear()
-
+            return hoyou.views.home(request)
     buffer.clear()
+    count = 0
     return render(request, "register_vector.html")
 
 def ajax_recieve(request):
     for key, value in request.POST.items():
         request.session[key] = value
     return JsonResponse({"result":"ok"})
+
+def main(request):
+    global buffer
+    global flag
+    global count
+    flag = "main"
+    
+    buffer.clear()
+    count = 0
+    return render(request, "main.html")

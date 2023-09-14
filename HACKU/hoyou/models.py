@@ -16,18 +16,15 @@ class Person(models.Model):
     
     def __str__(self):
         return self.family_name+' '+self.first_name
-    
+class Shuttai(models.TextChoices):#出退勤、その他を記録
+    shukkin='shukkin','出勤'
+    taikin='taikin','退勤'
+    sonota='sonota','その他'    
 #通過した時の記録
 class Record(models.Model):
     person=models.ForeignKey(Person,null=True,on_delete=models.SET_NULL)#Personのデータを削除したらnullとなる
     date=models.DateTimeField()#日付は山さんのデータでもらうかも
-    class Shuttai(models.TextChoices):#出退勤、その他を記録
-        shukkin='shukkin','出勤'
-        taikin='taikin','退勤'
-        sonota='sonota','その他'
     shuttai=models.CharField(max_length=10,choices=Shuttai.choices,default=Shuttai.sonota)
-
-
     def __str__(self):
         if self.person!=None:
             return str(self.id)+str(self.person)+str(self.date)

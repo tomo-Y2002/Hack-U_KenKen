@@ -9,4 +9,5 @@ urlpatterns=[
     path('test_register/', views.test_register, name="test_register"),
     path('hoyou_register/',views.hoyou_register, name="hoyou_register"),
     path('ajax_recieve/', views.ajax_recieve, name="ajax_recieve"),
+    path('main/', views.main, name="main"),
 ]

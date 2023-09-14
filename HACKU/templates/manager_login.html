@@ -6,5 +6,13 @@
         <label>パスワード:</label> <input type="password" name="password"><br>
         <button type="submit">ログイン</button>
     </form>
+
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
     <a href="{%url 'manager_register'%}"><h4>新規登録はこちら</h4></a>
 </body>

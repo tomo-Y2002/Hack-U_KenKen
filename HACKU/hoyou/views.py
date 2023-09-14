@@ -25,13 +25,15 @@ def manager_login(request):
         try:
             manager=User.objects.get(username=username)
         except:
-            HttpResponse('user does not exist')
+            messages.error(request,'user does not exist')
+            return redirect('manager_login')
         manager=authenticate(request,username=username,password=password)
         if manager is not None:
             login(request,manager)
             return redirect('home')
         else:
-            return HttpResponse('username or password is wrong')          
+            messages.error(request,'username or password is wrong')
+            return redirect('manager_login')        
     context={}
     return render(request,'manager_login.html',context)
 

@@ -1,0 +1,13 @@
+<body>
+    <h3>新規管理者登録</h3>
+    <a href="{% url 'manager_login' %}">ログインページへ</a>
+    <form method="POST">
+        {% csrf_token %}
+        <label>ユーザーネーム:</label><input type="text" name="username"><br>
+        <label>メールアドレス:</label><input type="email" name="email"><br>
+        <label>パスワード:</label> <input type="password" name="password1"><br>
+        <label>パスワード:</label> <input type="password" name="password2"><br>
+        <button type="submit">登録</button>
+    </form>
+
+</body>

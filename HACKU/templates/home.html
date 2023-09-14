@@ -1,0 +1,22 @@
+{% extends 'navbar.html' %}
+<head>
+    <title>
+    {% block title %}
+        ホーム画面
+    {% endblock %}
+    </title>
+</head>
+<body>
+    {% block breadcrumb %}
+    <h1>home</h1>
+    {% endblock %}
+
+    {% block content %}
+    <a href="{% url 'manager_logout'%}">ログアウト</a><br>
+    <a href="{% url 'realtime' %}">歩容認証へ</a><br>
+    <a href="{% url 'person_register' %}"> 新規登録</a><br>
+    <a href="{% url 'person_list'%}">登録者一覧</a><br>
+    <a href="{% url 'all_records'%}">出退勤履歴、変更</a><br>
+    <a href="{% url 'delete_modify_history'%}">変更履歴</a>
+    {% endblock %} 
+</body>

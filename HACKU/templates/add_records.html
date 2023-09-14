@@ -1,0 +1,56 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>履歴の作成</title>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token%}
+        <nav class="navbar bg-warning">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">GatePass</span>
+                <a href="{% url 'home' %}">home</a>
+            </div>
+        </nav>
+        <div class="mx-auto mt-4" style="width: 200px;">
+            <h2>履歴の作成</h2>
+        </div>
+        <div class="d-grid gap-0.1 col-3 mx-auto mt-4">
+            <div class="row mb-3">
+                <label for="nameSelect" class="col-sm-2 col-form-label-lg" required>名前</label>
+                <div class="col-sm-10">
+                    <select name="person" class="form-select form-select-lg" aria-label="Default select example" id="nameSelect">
+                        {% for person in persons %} 
+                        <option value="{{person.id}}" >{{person}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label-lg">種類</label>
+                <div class="col-sm-10">
+                    <select name="shuttai" class="form-select form-select-lg" aria-label="Default select example">
+                        <option value="shukkin" >出勤</option>
+                        <option value="taikin" >退勤</option>
+                        <option value="sonota" >その他</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label-lg">日付</label>
+                <div class="col-sm-10">
+                    <input type="date" name="date" class="form-control form-control-lg">
+                </div>
+            </div>
+            <div class="row mb-3">    
+                <label class="col-sm-2 col-form-label-lg">時間</label>
+                <div class="col-sm-10">
+                    <input type="time" name="time" class="form-control form-control-lg">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">登録</button>
+            </div>
+        </div>
+    </form>
+</body>

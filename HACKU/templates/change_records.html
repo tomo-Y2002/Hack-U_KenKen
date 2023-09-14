@@ -1,0 +1,30 @@
+<body>
+    <a href="{% url 'home' %}">ホームへ</a><br>
+    <h3>変更</h3>
+    <form method="POST">
+        {% csrf_token%}
+        <label>日時:</label>{{record.date}}<br>
+
+        <label>名前:</label>
+        <select name="person">
+            {% for person in persons %} 
+            <option value="{{person.id}}" {%if record.person == person %} selected="selected" {% endif %}>{{person}}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label>種類:</label>
+        <select name="shuttai">
+            <option value="shukkin" {%if record.shuttai == "shukkin"%} selected="selected" {% endif %}>出勤</option>
+            <option value="taikin" {%if record.shuttai == "taikin"%} selected="selected" {% endif %}>退勤</option>
+            <option value="sonota" {%if record.shuttai == "sonota"%} selected="selected" {% endif %}>その他</option>
+        </select><br>
+
+        <button type="submit" name="change">変更</button> 
+    </form>
+    <h3>削除</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="delete">削除</button>
+    </form>
+</body>

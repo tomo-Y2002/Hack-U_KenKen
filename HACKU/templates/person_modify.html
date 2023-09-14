@@ -1,0 +1,23 @@
+<body>
+    <a href="{% url 'home' %}">
+        <h2>ホームへ</h2>
+    </a>
+    <h2>{{person}}の個人情報で変更したい内容を直して下さい</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token%}
+        <div>
+            <label>名字:</label> <input type="text" name="family_name" value="{{person.family_name}}"> <label>名前:</label> <input type=" 'text" name="first_name" value="{{person.first_name}}"><br>
+            <label>メールアドレス</label><input type="email" name="email" value="{{person.email}}"><br>
+            <label>誕生日</label><input type="date" id="myDateInput" name="birthday"><br><label>写真を変更しますか?</label> <br>
+            {{form}}
+            <label>写真</label><input type="file" name="image" accept=image/*><br>
+            <button type=" submit ">提出</button>
+        </div>
+    </form>
+    <script>
+        var formattedDate = "{{ person.birthday|date:'Y-m-d' }}";
+        document.getElementById("myDateInput").value = formattedDate;
+    </script>
+
+
+</body>

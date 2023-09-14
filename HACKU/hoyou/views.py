@@ -41,6 +41,7 @@ def manager_logout(request):
     logout(request)
     return redirect('manager_login')
 
+
 def manager_register(request):
     if request.method=='POST':
         username=request.POST.get('username')
@@ -64,19 +65,8 @@ def manager_register(request):
 
 @login_required(login_url='/manager_login')
 def realtime(request):
-
     #この関数はまずしっかり出力されるかのテスト用なので後で直す
-    records=[]
-    ids=[]
-    
-    for num in ids:#本当はidがあるかどうかでtryする
-        try:
-            record=Record.objects.get(id=num)
-            records.append(record)
-        except ObjectDoesNotExist:
-            return HttpResponse(num)
-
-
+    records=Record.objects.all().order_by('-date')[:10]
     context={"records":records}
     return render(request,'realtime.html',context)
 

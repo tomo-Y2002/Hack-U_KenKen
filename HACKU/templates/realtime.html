@@ -9,6 +9,7 @@
             <thead>
                 <tr>
                     <th>日付</th>
+                    <th>種類</th>
                     <th>名前</th>
                 </tr>
             </thead>
@@ -16,13 +17,14 @@
                 {% for record in records%}
                 <tr>
                     <td>{{record.date}}</td>
+                    <td>{{record.shuttai}}</td>
                     <td>{{record.person}}</td>
                 </tr>
                 {% endfor %}
 
                 <script>
                     //js用のフォルダができたらそこにこの機能を入れてもいいかも
-                    //0.5秒に一回再読み込みをする
+                    //1秒に一回再読み込みをする
                     function open_realtime() {
                         window.location.href = '';
                     }

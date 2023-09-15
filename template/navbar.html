@@ -1,0 +1,53 @@
+{% load static %}<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}title{% endblock %}</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    </head>
+  <body style="height: 100vh; background-color: white">
+    <nav class="navbar navbar-expand-lg" style="height: 24vh; background: linear-gradient(rgb(237, 218, 9), white); background-size: cover;">
+      <div class="container-fluid mt-2 mb-4">
+        <a class="navbar-brand col-4 ps-5" href="{% url 'home' %}" >
+          <h1 style="font-size: 200%; font-family:fantasy">
+          GaitPass
+          </h1>
+        </a>
+        
+        <div class="col-3"></div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse col-4" id="navbarSupportedContent">
+          <ul class="navbar-nav me-0 mb-2 mb-lg-0 ">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'realtime' %}" style="color: black;" onmouseover="this.style.color='white';" onmouseout="this.style.color='black';">
+                  歩容認証へ
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'person_register' %}" style="color: black;" onmouseover="this.style.color='white';" onmouseout="this.style.color='black';">新規登録</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'person_list'%}" style="color: black;" onmouseover="this.style.color='white';" onmouseout="this.style.color='black';">登録者一覧</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'all_records'%}" style="color: black;" onmouseover="this.style.color='white';" onmouseout="this.style.color='black';">履歴の参照・変更</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home'%}" style="color: black" onmouseover="this.style.color='white';" onmouseout="this.style.color='black';">ホームへ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'manager_logout'%}" style="color: black" onmouseover="this.style.color='white';" onmouseout="this.style.color='black';">ログアウト</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div>
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>

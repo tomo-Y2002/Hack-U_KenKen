@@ -1,0 +1,54 @@
+{% extends 'navbar.html' %}
+{% block title %}
+    履歴の参照・変更
+{% endblock %}
+{% block content %}
+
+    <div class="text-center mb-5">
+        <h3>{{person}}の個人情報で変更したい内容を直して下さい</h3>
+    </div>
+
+    <form method="POST" class="d-flex justify-content-center vh-10" enctype="multipart/form-data">
+        {% csrf_token%}
+        <div class="col-4">
+            <div class="mb-3">
+                <label for="floatingInput">名字</label>
+                <input type="text" class="form-control" id="floatingInput" name="family_name" value="{{person.family_name}}">
+            </div>
+            <div class="mb-3">
+                <label for="floatingInput2">名前</label>
+                <input type="text" class="form-control" id="floatingInput2" name="first_name" value="{{person.first_name}}">
+            </div>
+            <div class="mb-3">
+                <label for="floatingInput3">メールアドレス</label>
+                <input type="email" class="form-control" id="floatingInput3" name="email" value="{{person.email}}">
+            </div>
+            <div class="mb-3">
+                <label>生年月日</label>
+                <input type="date" class="form-control" id="myDateInput" name="birthday">
+            </div>
+            <div class="mb-3">
+                <label>写真を変更しますか?</label> <br>
+                {{form}}
+            </div>
+            <div class="form-group mb-3">
+                <label for="formFile" class="form-label">写真</label>
+                <input class="form-control" type="file" id="formFile" name="image" accept=image/*>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-outline-dark btn-lg">変更</button>
+            </div>
+        </div>
+    </form>
+    <div class="text-center mt-5">
+        <a href="{% url 'home' %}" class="btn btn-outline-warning">ホームに戻る</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+    <script>
+        var formattedDate = "{{ person.birthday|date:'Y-m-d' }}";
+        document.getElementById("myDateInput").value = formattedDate;
+    </script>
+{% endblock %}

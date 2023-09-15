@@ -1,0 +1,43 @@
+{% extends 'navbar.html' %}
+{% block title %}
+    履歴の参照・変更
+{% endblock %}
+{% block content %}
+    <div class="mx-auto text-center mt-4">
+        <h2>履歴の作成</h2>
+    </div>
+    <form method="POST" class="d-flex justify-content-center vh-10" enctype="multipart/form-data">
+        {% csrf_token%}
+        <div class="col-4">
+            <div class="mt-3">
+                <label required>名前</label>
+                <select name="person" class="form-select form-select-lg" aria-label="Default select example" id="nameSelect">
+                    {% for person in persons %} 
+                    <option value="{{person.id}}" >{{person}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mt-3">
+                <label>種類</label>
+                <select name="shuttai" class="form-select form-select-lg" aria-label="Default select example">
+                    <option value="shukkin">出勤</option>
+                    <option value="taikin">退勤</option>
+                    <option value="sonota">その他</option>
+                </select>
+            </div>
+            <div class="mt-3">
+                <label>日付</label>
+                <input type="date" name="date" class="form-control form-control-lg">
+            </div>
+            <div class="mt-3">    
+                <label>時間</label>
+                <input type="time" name="time" class="form-control form-control-lg">
+            </div>
+            <div class="mt-4 text-center">
+                <button type="submit" class="btn btn-outline-dark btn-lg">登録</button>
+            </div>
+        </div>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+{% endblock %}

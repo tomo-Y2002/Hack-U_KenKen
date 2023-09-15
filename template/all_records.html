@@ -1,0 +1,95 @@
+{% extends 'navbar.html' %}
+{% block title %}
+    履歴の参照・変更
+{% endblock %}
+{% block content %}
+    <div class="mb-4 row mx-auto text-center">
+        <h3>出退勤履歴の編集</h3>
+    </div>
+    <div class="row mb-1 mx-auto text-center">
+        <h5><<<　条件の絞り込み　>>></h5>
+    </div>
+    <form method="POST" class="d-flex justify-content-center vh-10" enctype="multipart/form-data">
+        {% csrf_token%}
+        <div class="col-4">
+            <div class="mb-3">
+                <label for="Input">名字</label>
+                <input type="text" class="form-control" id="Input" name="q">
+            </div>
+            <div class="mb-3">
+                <label for="Input2">名前</label>
+                <input type="text" class="form-control" id="Input2" name="q">
+            </div>
+            <div class="mb-3">
+                <label for="kind">種類</label>
+                <div class="col-sm-10">
+                    <select name="shuttai" id="kind" class="form-select form-select-sm">
+                        <option value="shukkin" >出勤</option>
+                        <option value="taikin" >退勤</option>
+                        <option value="sonota" >その他</option>
+                        <option value="no_selection" selected="selected">指定しない</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>期間</label>
+                <div class="row">
+                    <input type="date" class="form-control" name="start_time">
+                    <input type="time" name="start_time" class="form-control">
+                    <label>~</label>
+                    <input type="date" name="end_date" class="form-control">
+                    <input type="time" name="end_time" class="form-control">
+                </div>
+            </div>
+
+            <div class="mb-4 text-center">
+                <button type="search" class="btn btn-outline-dark btn-lg" id="search">絞り込む</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="mx-auto mb-5" style="width: 500px; text-align: center;">
+        <p>{{records_count}}件の履歴が見つかりました</p>
+    </div>
+
+    <table class="mx-auto table-bordered mb-5" style="border-color: black; width: 40%;">
+        <thead style="background-color: rgb(199, 193, 193);">
+            <tr>
+                <th style="text-align: center;">名前</th>
+                <th style="text-align: center;">種類</th>
+                <th style="text-align: center;">日付</th>
+                <th style="text-align: center;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for record in records%}
+            <tr>
+                {%if record.person%}
+                <td style="text-align: center;">{{record.person}}</td>
+                {% else %}
+                <td style="text-align: center;"> DELETED_PERSON </td>
+                {%endif%}
+                <td style="text-align: center;">{{record.get_shuttai_display}}</td>
+                <td style="text-align: center;">{{record.date}}</td>
+                <td style="text-align: center;">
+                    <a href="/change_records/{{record.id}}">
+                        <button class="btn btn-outline-dark">
+                            変更または削除
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+    <div class="text-center mb-5">
+        <a href="{% url 'add_records' %}" class="btn btn-outline-warning">新しく履歴を作成</a>
+    </div>
+
+    <div class="text-center mb-5">
+        <a href="{% url 'home' %}" class="btn btn-outline-warning">ホームに戻る</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+{% endblock %}

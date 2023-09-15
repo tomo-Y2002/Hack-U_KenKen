@@ -1,0 +1,45 @@
+{% extends 'navbar.html' %}
+{% block title %}
+    履歴の参照・変更
+{% endblock %}
+{% block content %}
+    <div class="mb-4 row mx-auto text-center">
+        <h3>GaitPassユーザー新規登録</h3>
+    </div>
+    <form method="POST" class="d-flex justify-content-center vh-10" enctype="multipart/form-data">
+        {% csrf_token%}
+        <div class="col-4">
+            <div class="mb-3">
+                <label for="floatingInput">名字</label>
+                <input type="text" class="form-control" id="floatingInput" name="family_name">
+            </div>
+            <div class="mb-3">
+                <label for="floatingInput2">名前</label>
+                <input type="text" class="form-control" id="floatingInput2" name="first_name">
+            </div>
+            <div class="mb-3">
+                <label for="floatingInput3">メールアドレス</label>
+                <input type="email" class="form-control" id="floatingInput3" name="email">
+            </div>
+            <div class="mb-3">
+                <label for="birthday">生年月日</label>
+                <input type="date" class="form-control" id="birthday" name="birthday">
+            </div>
+            <div class="form-group mb-3">
+                <label for="formFile" class="form-label">写真</label>
+                <input class="form-control" type="file" id="formFile" name="image" accept=image/*>
+            </div>
+            <br>
+            
+            <div class="text-center">
+                <button type="submit" class="btn btn-outline-dark btn-lg">登録</button>
+            </div>
+        </div>
+    </form>
+    <div class="text-center mt-5">
+        <a href="{% url 'home' %}" class="btn btn-outline-warning">ホームに戻る</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+{% endblock %}

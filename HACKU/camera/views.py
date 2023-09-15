@@ -48,15 +48,14 @@ class VideoCamera(object):
                     writer.write(frame)
                 writer.release()
                 vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/HACKU/video2vec/model_0.832.pth")
-                if(vector):
-                    id = functions.inner_product(vector)
-                    person=Person.objects.get(id=id)
-                    newest=Record.objects.filter(person=person)
-                    if(not newest.exists()):
-                        shuttai = Shuttai.shukkin if newest.last().shuttai == Shuttai.taikin else Shuttai.taikin if newest.last().shuttai == Shuttai.shukkin else Shuttai.shukkin
-                    else:
-                        shuttai = Shuttai.shukkin
-                    functions.create_record(id, shuttai)
+                id = functions.inner_product(vector)
+                person=Person.objects.get(id=id)
+                newest=Record.objects.filter(person=person)
+                if(not newest.exists()):
+                    shuttai = Shuttai.shukkin if newest.last().shuttai == Shuttai.taikin else Shuttai.taikin if newest.last().shuttai == Shuttai.shukkin else Shuttai.shukkin
+                else:
+                    shuttai = Shuttai.shukkin
+                functions.create_record(id, shuttai)
                 flag = "main"
                 buffer.clear()
                 count = 0
@@ -135,16 +134,17 @@ def hoyou_register(request):
             for frame in frames:
                 writer.write(frame)
             writer.release()
-            vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/video2vec/model_0.832.pth")
-            if(vector):
-                binary_data = request.session["image"]  # クライアントからのデータを取得
-                image_data = base64.b64decode(binary_data.split(',')[1])  # Data URIをデコード
-                image = ContentFile(image_data, name=request.session["family_name"]+request.session["first_name"]+request.session["birthday"]+'.jpg')
-                test_person = Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
-                buffer.clear()
-                return redirect('')
-            else:
-                return redirect('camera:hoyou_register')
+            vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/HACKU/video2vec/model_0.832.pth")
+            binary_data = request.session["image"]  # クライアントからのデータを取得
+            image_data = base64.b64decode(binary_data.split(',')[1])  # Data URIをデコード
+            image = ContentFile(image_data, name=request.session["family_name"]+request.session["first_name"]+request.session["birthday"]+'.jpg')
+            test_person = Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
+            test_person.save()
+            functions.create_record(1, Shuttai.shukkin)
+            buffer.clear()
+            return redirect('home')
+            # else:
+            #     return redirect('camera:hoyou_register')
     buffer.clear()
     count = 0
     return render(request, "register_vector.html")

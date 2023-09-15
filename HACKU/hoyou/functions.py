@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
 import base64
-from .models import Person,Record
+from .models import Person,Record,Shuttai
 import numpy as np
 import pickle
 

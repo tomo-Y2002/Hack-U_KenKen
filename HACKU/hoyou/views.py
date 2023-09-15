@@ -71,7 +71,6 @@ def realtime(request):
     data={"records":[]}
     for record in records:
         data['records'].append({"person":str(record.person), "date":str(record.date), "shuttai":record.shuttai})
-    print(data)
     return Response(data)
 
 @login_required(login_url='/manager_login')

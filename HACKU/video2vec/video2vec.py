@@ -341,13 +341,14 @@ def video2vec(FILE_PATH, WEIGHT_PATH)->np.array:
                 if (gei.height == s.height):
                     for y in range(s.height):
                         for x in range(s.width):
-                            gei.arr[y][x+pad_x] += s.arr[y][x]
+                            if(x+pad_x < gei.width):
+                                gei.arr[y][x+pad_x] += s.arr[y][x]
                 else:
                     print("error:GEITとsilhouetteの高さがあっていません")
                     break
         else:
             print("error:複数の物体が検出されました。対応不可です")
-            return None
+            break
 
     gei.aveBy(len(SilhouetteEdges_timeseq))
 
@@ -426,8 +427,8 @@ def video2vec(FILE_PATH, WEIGHT_PATH)->np.array:
     return features.numpy()
 
 if __name__=='__main__':
-    video_path = '/content/drive/MyDrive/HackU/data/walk1.mp4'
-    weight_path = f'/content/drive/MyDrive/HackU/data/weight/model_{0.834}.pth'
+    weight_path = f"C:/Users/denjo/Desktop/HackU/data/model_{0.848}.pth"
+    video_path = "C:/Users/denjo/Desktop/HackU/data/shimizu.MP4"
     vector = video2vec(video_path, weight_path)
     print(type(vector))
     print(vector.shape)

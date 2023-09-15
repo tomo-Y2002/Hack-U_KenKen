@@ -16,6 +16,7 @@ from video2vec import HumanInFrame, video2vec
 import hoyou.views
 from hoyou import functions
 import itertools
+from django.shortcuts import redirect
 
 buffer = deque(maxlen=1000)
 flag = None
@@ -141,9 +142,9 @@ def hoyou_register(request):
                 image = ContentFile(image_data, name=request.session["family_name"]+request.session["first_name"]+request.session["birthday"]+'.jpg')
                 test_person = Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
                 buffer.clear()
-                return hoyou.views.home(request)
+                return redirect('')
             else:
-                return hoyou_register(request)
+                return redirect('camera:hoyou_register')
     buffer.clear()
     count = 0
     return render(request, "register_vector.html")

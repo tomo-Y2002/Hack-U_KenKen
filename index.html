@@ -1,71 +1,32 @@
-<!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="description" content="見附家のルートをコウキから辿る。実は見附家は江戸時代にその姓を受けたのです。">
-    <link rel="stylesheet" href="style.css">
-    <title>見附家のルートをコウキから辿る</title>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css" >
 </head>
 <body>
-    <article>
-        <h1>見附家のルートをコウキから辿る</h1>
-        <p>第1045回見附ふしぎ発見ではT大学に通う学生の見附さんの家のルートをたどります。</p>
-        <a href="https://researcher.josai.ac.jp/html/100000265_ja.html" target="_blank">
-            <div>
-                <img src="mitsuke.jpg" width="140" height="200" alt="kouki">
-            </div>
-            <p>ここからルートをたどる</p>
-        </a>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>hoge</p>
-        <p>さらに教養を深めたい方は<a href="https://www.ee.t.u-tokyo.ac.jp/" target="_blank">こちらをクリック</a></p>
-        <a href="#">ページトップに戻る</a>
-    </article>
+    <iframe id="capture-view" src="./capture"></iframe>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="savefig">写真保存</button>
+        <button type="submit" name="savevid">動画保存</button>
+    </form>
+
+
+    <iframe id="clockFrame" name="clockFrame" src="about:blank" width="400" height="100"></iframe>
+    <script>
+        const clockLink = document.getElementById('clockLink');
+        const iframe = document.getElementById('clockFrame');
+        const updateInterval = 1000;  // ミリ秒単位の更新間隔
+
+        function updateIframe() {
+            iframe.src = './test_flag';  // DjangoビューのURLに設定
+            iframe.addEventListener('click', function () {
+                // ボタンをクリックしたようにDjangoビューを呼び出す
+                window.location.href = './test_register';
+            });
+        }
+        setInterval(updateIframe, updateInterval);
+    </script>
 </body>
 </html>

@@ -27,7 +27,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        $(window).on('load', function(){
+        $(document).ready(function() {
             function updateTable(records) {
                 const tableBody = document.getElementById('data-table-body');
                 tableBody.innerHTML = ''; // テーブルの中身をクリア

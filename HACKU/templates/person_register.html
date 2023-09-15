@@ -7,15 +7,74 @@
         {% csrf_token%}
         <div>
             <!--今度直すかも-->
-            <label>名字:</label> <input type="text" name="family_name"> <label>名前:</label> <input type="text" name="first_name"> <br>
-            <label>メールアドレス:</label> <input type="email" name="email"><br>
+            <label>名字:</label> <input type="text" id="family_name" name="family_name"> <label>名前:</label> <input type="text" id="first_name" name="first_name"> <br>
+            <label>メールアドレス:</label> <input type="email" id="email" name="email"><br>
             <label>誕生日:</label>
-            <input type="date" name="birthday"><br>
-            <input type="file" name="image" accept=image/*><br>
+            <input type="date" id="birthday" name="birthday"><br>
+            <input type="file" id="fileInput" name="fileInput" accept=image/*><br>
             カメラを起動して歩容撮影をします。
             <button type="submit">登録</button>
         </div>
     </form>
     次にカメラで撮影をします
-    <a href="/camera/hoyou_register">次へ</a>
+    <button id="next">次へ</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // クッキーの名前と値を分割して比較
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        // ボタンがクリックされたときの処理
+        document.getElementById("next").addEventListener("click", function() {
+            // Djangoビュー関数の引数
+            var family_name=document.getElementById('family_name').value;
+            var first_name=document.getElementById('first_name').value;
+            var email=document.getElementById('email').value;
+            var birthday=document.getElementById('birthday').value;
+            var image;
+            var fileInput = document.getElementById("fileInput");
+            var file = fileInput.files[0];
+            if (file) {
+                var fileInput = document.getElementById("fileInput");
+                var file = fileInput.files[0];
+                console.log(file)
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (event) {
+                        var image = event.target.result; // バイナリデータ
+                        $.ajax({
+                            'url': '{% url "camera:ajax_recieve" %}',
+                            'type': 'POST',
+                            'headers': {
+                                "X-CSRFToken": getCookie("csrftoken") // CSRFトークンを含める
+                            },
+                            'data': {
+                                'family_name': family_name,
+                                'first_name': first_name,
+                                'email': email,
+                                'birthday': birthday,
+                                'image': image,
+                            },
+                            'dataType': 'json'
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+            var url = "{% url 'camera:hoyou_register' %}"
+            window.location.href = url
+           
+        });
+    </script>
 </body>

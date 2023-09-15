@@ -85,6 +85,7 @@ def realtime(request):
 
 @login_required(login_url='/manager_login')
 def person_register(request):
+    request.session["test"] = "bakakakaka"
     if request.method=='POST':
         family_name=request.POST.get('family_name')
         first_name=request.POST.get('first_name')
@@ -94,6 +95,7 @@ def person_register(request):
         context={}
         return render(request,'hoyou_register.html',context)
     context={}
+    print(request.session["test"])
     return render(request,'person_register.html',context)
 
 

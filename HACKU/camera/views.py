@@ -1,16 +1,18 @@
 from django.shortcuts import render
-from django.http import HttpResponse,StreamingHttpResponse
+from django.http import HttpResponse,StreamingHttpResponse,JsonResponse
 from django.views.decorators import gzip
 from django.views.decorators.clickjacking import xframe_options_exempt
 import cv2
 import numpy as np
-import io
 from HACKU.settings import BASE_DIR
 from collections import deque
 from hoyou.models import Person
 import time
 from django.utils.timezone import now
 import copy
+import base64
+from django.core.files.base import ContentFile
+from video2vec import HumanInFrame, video2vec
 
 buffer = deque(maxlen=1000)
 flag = False
@@ -34,10 +36,6 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-def tm():
-    while True:
-        yield str(time.time_ns())
-
 def index(request):
     global buffer
     if(len(buffer)):
@@ -52,6 +50,7 @@ def index(request):
                 writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
                 for frame in frames:
                     writer.write(frame)
+    buffer.clear()
     return render(request ,'index.html')
 
 @ gzip.gzip_page
@@ -87,17 +86,26 @@ def test_register(request):
     
 def hoyou_register(request):
     global buffer
-    if(len(buffer)):
-        if request.method == "POST":
-            if "savefig" in request.POST:
-                cv2.imwrite(str(BASE_DIR)+"/media/test/myfig.jpg", buffer[-1])
-            if "savevid" in request.POST:
-                frames = copy.copy(buffer)
-                fps = 30
-                h, w = frames[0].shape[:2]
-                fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-                writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
-                for frame in frames:
-                    writer.write(frame)
-            return render(request ,'home.html')
-    return render(request,'hoyou_register.html')
+    if request.method == "POST":
+        if "next" in request.POST:
+            frames = copy.copy(buffer)
+            fps = 30
+            h, w = frames[0].shape[:2]
+            fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+            writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
+            for frame in frames:
+                writer.write(frame)
+            vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/video2vec/model_0.832.pth")
+            binary_data = request.session["image"]  # クライアントからのデータを取得
+            image_data = base64.b64decode(binary_data.split(',')[1])  # Data URIをデコード
+            image = ContentFile(image_data, name='image.jpg')
+            test_person = Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
+            buffer.clear()
+
+    buffer.clear()
+    return render(request, "register_vector.html")
+
+def ajax_recieve(request):
+    for key, value in request.POST.items():
+        request.session[key] = value
+    return JsonResponse({"result":"ok"})

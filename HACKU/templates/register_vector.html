@@ -1,0 +1,33 @@
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css" >
+</head>
+<body>
+    <iframe id="capture-view" src="/camera/capture" width="640" height="480"></iframe>
+    <script>
+        var displayDuration = 5000;
+        setTimeout(function () {
+            document.getElementById("capture-view").contentWindow.stop();
+        }, displayDuration);
+    </script>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="next">ベクトル生成</button>
+        <button type="submit" name="again" id="again_button">再撮影</button>
+    </form> 
+    <script>
+        // ボタンがクリックされたときにページをリロードする関数
+        function reloadPage() {
+            location.reload(); // ページをリロード
+        }
+
+        // ボタンをクリックしたときにリロード関数を呼び出す
+        document.getElementById("again_button").addEventListener("click", function(event) {
+            event.preventDefault(); // ボタンのデフォルトの動作を無効化（フォームの送信を防ぐ）
+            reloadPage(); // ページをリロード
+        });
+    </script>
+</body>
+</html>

@@ -5,28 +5,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css" >
 </head>
 <body>
-    <iframe id="capture-view" src="./capture" width="640" height="480"></iframe>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" name="savefig">写真保存</button>
-        <button type="submit" name="savevid">動画保存</button>
-    </form>
-
-
-    <iframe id="clockFrame" name="clockFrame" src="about:blank" width="400" height="100"></iframe>
-    <script>
-        const clockLink = document.getElementById('clockLink');
-        const iframe = document.getElementById('clockFrame');
-        const updateInterval = 1000;  // ミリ秒単位の更新間隔
-
-        function updateIframe() {
-            iframe.src = './test_flag';  // DjangoビューのURLに設定
-            iframe.addEventListener('click', function () {
-                // ボタンをクリックしたようにDjangoビューを呼び出す
-                window.location.href = './test_register';
-            });
-        }
-        setInterval(updateIframe, updateInterval);
-    </script>
+    <iframe id="capture-view" src="/camera/capture" width="640" height="480"></iframe>
+    <iframe id="realtime" name="realtime" src="/realtime" width="640" height="480"></iframe>
 </body>
 </html>

@@ -15,6 +15,7 @@ from django.core.files.base import ContentFile
 from video2vec import HumanInFrame, video2vec
 import hoyou.views
 from hoyou import functions
+import itertools
 
 buffer = deque(maxlen=1000)
 flag = None
@@ -33,28 +34,37 @@ class VideoCamera(object):
         success, image = self.video.read()
         ret, jpeg = cv2.imencode('.jpg', image)
         buffer.append(image)
-        if(flag == "main" and count%30 == 0 and len(buffer) > 60):
-            frames = copy.copy(buffer[-60:-1])
-            if(HumanInFrame.HumanInFrame(frames[30])):
+        count += 1
+        if(flag == "main" and count%30 == 0 and len(buffer) > 120):
+            frames = copy.copy(list(itertools.islice(buffer, len(buffer)-120, len(buffer)-1)))
+            if(HumanInFrame.HumanInFrame(frames[60])):
+                flag = "processing"
                 fps = 30
-            h, w = frames[0].shape[:2]
-            fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
-            for frame in frames:
-                writer.write(frame)
-            vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/video2vec/model_0.832.pth")
-            id = functions.inner_product(vector)
-            person=Person.objects.get(id=id)
-            newest=Record.objects.filter(person=person)
-            if(not newest.exists()):
-                shuttai = Shuttai.shukkin if newest.last().shuttai == Shuttai.taikin else Shuttai.taikin if newest.last().shuttai == Shuttai.shukkin else Shuttai.shukkin
-            else:
-                shuttai = Shuttai.shukkin
-            functions.create_record(id, shuttai)
+                h, w = frames[0].shape[:2]
+                fmt = cv2.VideoWriter_fourcc('a', 'v', 'c', '1')
+                writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
+                for frame in frames:
+                    writer.write(frame)
+                
+                vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/video2vec/model_0.832.pth")
+                id = functions.inner_product(vector)
+                person=Person.objects.get(id=id)
+                newest=Record.objects.filter(person=person)
+                if(not newest.exists()):
+                    shuttai = Shuttai.shukkin if newest.last().shuttai == Shuttai.taikin else Shuttai.taikin if newest.last().shuttai == Shuttai.shukkin else Shuttai.shukkin
+                else:
+                    shuttai = Shuttai.shukkin
+                functions.create_record(id, shuttai)
+                flag = "main"
+                buffer.clear()
+                count = 0
         return jpeg.tobytes()
 
 def gen(camera):
+    global flag
     while True:
+        if(flag == "processing"):
+            yield 0
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
@@ -69,7 +79,7 @@ def index(request):
                 frames = copy.copy(buffer)
                 fps = 30
                 h, w = frames[0].shape[:2]
-                fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+                fmt = cv2.VideoWriter_fourcc('a', 'v', 'c', '1')
                 writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
                 for frame in frames:
                     writer.write(frame)
@@ -117,7 +127,7 @@ def hoyou_register(request):
             frames = copy.copy(buffer)
             fps = 30
             h, w = frames[0].shape[:2]
-            fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+            fmt = cv2.VideoWriter_fourcc('a', 'v', 'c', '1')
             writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
             for frame in frames:
                 writer.write(frame)

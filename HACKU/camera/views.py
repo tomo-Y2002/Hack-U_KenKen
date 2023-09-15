@@ -35,7 +35,7 @@ class VideoCamera(object):
         ret, jpeg = cv2.imencode('.jpg', image)
         buffer.append(image)
         count += 1
-        if(flag == "main" and count%30 == 0 and len(buffer) > 120):
+        if(flag == "main" and count%60 == 0 and len(buffer) > 120):
             frames = copy.copy(list(itertools.islice(buffer, len(buffer)-120, len(buffer)-1)))
             if(HumanInFrame.HumanInFrame(frames[60])):
                 flag = "processing"
@@ -45,16 +45,17 @@ class VideoCamera(object):
                 writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
                 for frame in frames:
                     writer.write(frame)
-                
-                vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/video2vec/model_0.832.pth")
-                id = functions.inner_product(vector)
-                person=Person.objects.get(id=id)
-                newest=Record.objects.filter(person=person)
-                if(not newest.exists()):
-                    shuttai = Shuttai.shukkin if newest.last().shuttai == Shuttai.taikin else Shuttai.taikin if newest.last().shuttai == Shuttai.shukkin else Shuttai.shukkin
-                else:
-                    shuttai = Shuttai.shukkin
-                functions.create_record(id, shuttai)
+                writer.release()
+                vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/HACKU/video2vec/model_0.832.pth")
+                if(vector):
+                    id = functions.inner_product(vector)
+                    person=Person.objects.get(id=id)
+                    newest=Record.objects.filter(person=person)
+                    if(not newest.exists()):
+                        shuttai = Shuttai.shukkin if newest.last().shuttai == Shuttai.taikin else Shuttai.taikin if newest.last().shuttai == Shuttai.shukkin else Shuttai.shukkin
+                    else:
+                        shuttai = Shuttai.shukkin
+                    functions.create_record(id, shuttai)
                 flag = "main"
                 buffer.clear()
                 count = 0
@@ -83,6 +84,7 @@ def index(request):
                 writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
                 for frame in frames:
                     writer.write(frame)
+                writer.release()
     buffer.clear()
     return render(request ,'index.html')
 
@@ -131,13 +133,17 @@ def hoyou_register(request):
             writer = cv2.VideoWriter(str(BASE_DIR)+"/media/test/myvid.mp4", fmt, fps, (w, h), 0)
             for frame in frames:
                 writer.write(frame)
+            writer.release()
             vector = video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/video2vec/model_0.832.pth")
-            binary_data = request.session["image"]  # クライアントからのデータを取得
-            image_data = base64.b64decode(binary_data.split(',')[1])  # Data URIをデコード
-            image = ContentFile(image_data, name=request.session["family_name"]+request.session["first_name"]+request.session["birthday"]+'.jpg')
-            test_person = Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
-            buffer.clear()
-            return hoyou.views.home(request)
+            if(vector):
+                binary_data = request.session["image"]  # クライアントからのデータを取得
+                image_data = base64.b64decode(binary_data.split(',')[1])  # Data URIをデコード
+                image = ContentFile(image_data, name=request.session["family_name"]+request.session["first_name"]+request.session["birthday"]+'.jpg')
+                test_person = Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
+                buffer.clear()
+                return hoyou.views.home(request)
+            else:
+                return hoyou_register(request)
     buffer.clear()
     count = 0
     return render(request, "register_vector.html")
@@ -156,3 +162,6 @@ def main(request):
     buffer.clear()
     count = 0
     return render(request, "main.html")
+
+def test():
+    video2vec.video2vec("C:/Users/denjo/Hack-U_KenKen/HACKU/media/test/myvid.mp4", "C:/Users/denjo/Hack-U_KenKen/HACKU/video2vec/model_0.832.pth")

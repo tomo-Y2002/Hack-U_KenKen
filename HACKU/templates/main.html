@@ -6,6 +6,61 @@
 </head>
 <body>
     <iframe id="capture-view" src="/camera/capture" width="640" height="480"></iframe>
-    <iframe id="realtime" name="realtime" src="/realtime" width="640" height="480"></iframe>
+    <table>
+        <thead>
+            <tr>
+                <th>Person</th>
+                <th>Date</th>
+                <th>Shuttai</th>
+            </tr>
+        </thead>
+        <tbody id="data-table-body">
+            {% for record in records %}
+            <tr>
+                <td>{{ record.person }}</td>
+                <td>{{ record.date }}</td>
+                <td>{{record.shuttai}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(window).on('load', function(){
+            function updateTable(records) {
+                const tableBody = document.getElementById('data-table-body');
+                tableBody.innerHTML = ''; // テーブルの中身をクリア
+            
+                records.forEach(function (record) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${record.person}</td><td>${record.date}</td><td>${record.shuttai}</td>`;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function fetchData() {
+                $.ajax({
+                    url: "{% url 'realtime' %}", // Django APIのエンドポイントを設定
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        // データを受け取ったらテーブルを更新
+                        updateTable(data.records);
+                    },
+                    error: function (error) {
+                        console.error('データの取得エラー', error);
+                    }
+                });
+            }
+            
+            // 最初のデータ取得
+            fetchData();
+            
+            // 一定の間隔でデータを取得
+            setInterval(fetchData(), 5000); // 5秒ごとにデータを取得（適切な間隔を設定 
+        });                 
+    </script>
+          
 </body>
 </html>

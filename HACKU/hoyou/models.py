@@ -10,7 +10,7 @@ class Person(models.Model):
     email=models.EmailField(max_length=100,null=False,blank=False)
     birthday=models.DateField(null=True,default=None)
     registered_date=models.DateTimeField(auto_now_add=True,null=True)
-    image=models.ImageField(upload_to='person_image/',null=True,default=None)
+    image=models.ImageField(upload_to='person_image/',null=True,default=None,blank=True)
     vector=PickledObjectField(null=True,blank=True)
 
     

@@ -347,7 +347,7 @@ def video2vec(FILE_PATH, WEIGHT_PATH)->np.array:
                     break
         else:
             print("error:複数の物体が検出されました。対応不可です")
-            break
+            return None
 
     gei.aveBy(len(SilhouetteEdges_timeseq))
 

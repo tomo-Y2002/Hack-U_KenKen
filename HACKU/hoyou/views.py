@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.http import HttpResponse,StreamingHttpResponse,JsonResponse
 from django.contrib import messages
 from .models import Person,Record
 from .forms import YesNoForm
@@ -10,13 +11,15 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from rest_framework.decorators import api_view
+from django.views.decorators import gzip
+from django.views.decorators.clickjacking import xframe_options_exempt
+from rest_framework.response import Response
 
 @login_required(login_url='/manager_login')
 def home(request):
     context={}
     return render(request,'home.html',context)
-
-
 
 def manager_login(request):
     if request.method=='POST':
@@ -61,27 +64,15 @@ def manager_register(request):
     context={}
     return render(request,'manager_register.html',context)
 
-
-@login_required(login_url='/manager_login')
+@api_view(['GET'])
 def realtime(request):
-
     #この関数はまずしっかり出力されるかのテスト用なので後で直す
-    records=[]
-    ids=[]
-    
-    for num in ids:#本当はidがあるかどうかでtryする
-        try:
-            record=Record.objects.get(id=num)
-            records.append(record)
-        except ObjectDoesNotExist:
-            return HttpResponse(num)
-
-
-    context={"records":records}
-    return render(request,'realtime.html',context)
-
-
-
+    records=Record.objects.all().order_by('-date')[:10]
+    data={"records":[]}
+    for record in records:
+        data['records'].append({"person":str(record.person), "date":str(record.date), "shuttai":record.shuttai})
+    print(data)
+    return Response(data)
 
 @login_required(login_url='/manager_login')
 def person_register(request):

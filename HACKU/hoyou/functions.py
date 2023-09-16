@@ -18,11 +18,11 @@ def inner_product(vector):
     id=None
     #登録してない人が通った場合はまた考えしょう
     for person in persons:
-        person_vector=pickle.loads(person.vector)
-        m=np.dot(person_vector,vector)
-        if m>max:
-            max=m
-            id=person.id
+        if(isinstance(person.vector, np.ndarray)):
+            m=np.dot(person.vector,vector)
+            if m>max:
+                max=m
+                id=person.id
     return id
 
 #person.idと出退勤のデータからRecordobjectの作成

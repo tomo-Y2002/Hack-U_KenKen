@@ -1,6 +1,7 @@
 # 定義
 # インポート
 import os
+import shutil
 import ultralytics
 from ultralytics import YOLO
 # from google.colab.patches import cv2_imshow
@@ -136,6 +137,7 @@ def video2vec(FILE_PATH, WEIGHT_PATH)->np.array:
     save : セグメンテーション結果を動画として保存するか
     '''
     # 実行時は以下のようにして、labelsを消すこと
+    shutil.rmtree(f'{HOME}/my_predict')
     results = model.predict(source = f'{HOME}/{FILE_NAME}',
                             project = f'{HOME}',
                             conf = 0.50,

@@ -9,9 +9,9 @@
     <table>
         <thead>
             <tr>
-                <th>Person</th>
-                <th>Date</th>
-                <th>Shuttai</th>
+                <th>人</th>
+                <th>時間</th>
+                <th>出退勤</th>
             </tr>
         </thead>
         <tbody id="data-table-body">
@@ -19,7 +19,7 @@
             <tr>
                 <td>{{ record.person }}</td>
                 <td>{{ record.date }}</td>
-                <td>{{record.shuttai}}</td>
+                <td>{{record.get_shuttai_display}}</td>
             </tr>
             {% endfor %}
         </tbody>

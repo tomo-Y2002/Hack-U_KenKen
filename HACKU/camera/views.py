@@ -138,9 +138,7 @@ def hoyou_register(request):
             binary_data = request.session["image"]  # クライアントからのデータを取得
             image_data = base64.b64decode(binary_data.split(',')[1])  # Data URIをデコード
             image = ContentFile(image_data, name=request.session["family_name"]+request.session["first_name"]+request.session["birthday"]+'.jpg')
-            test_person = Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
-            test_person.save()
-            functions.create_record(1, Shuttai.shukkin)
+            Person.objects.create(family_name=request.session["family_name"], first_name=request.session["first_name"], email=request.session["email"], birthday=request.session["birthday"], image=image, vector=vector)
             buffer.clear()
             return redirect('home')
             # else:

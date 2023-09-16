@@ -1,25 +1,24 @@
-<html>
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css" >
-</head>
-<body>
-    <iframe id="capture-view" src="/camera/capture" width="640" height="480"></iframe>
-    <table>
-        <thead>
+{% extends 'navbar.html' %}
+{% load static %}
+{% block title %}
+    認証
+{% endblock %}
+{% block content %}
+    <iframe class="mx-auto" id="capture-view" src="/camera/capture" width="640" height="480"></iframe>
+    <table class="mx-auto table-bordered mb-5" style="border-color: black;">
+        <thead style="background-color: rgb(199,193,193);">
             <tr>
-                <th>人</th>
-                <th>時間</th>
-                <th>出退勤</th>
+                <th style="text-align: center;">名前</th>
+                <th style="text-align: center;">通過時刻</th>
+                <th style="text-align: center;">出退勤</th>
             </tr>
         </thead>
         <tbody id="data-table-body">
             {% for record in records %}
             <tr>
-                <td>{{ record.person }}</td>
-                <td>{{ record.date }}</td>
-                <td>{{record.get_shuttai_display}}</td>
+                <td style="text-align: center;">{{ record.person }}</td>
+                <td style="text-align: center;">{{ record.date }}</td>
+                <td style="text-align: center;">{{ record.get_shuttai_display }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -61,6 +60,5 @@
             setInterval(fetchData(), 5000); // 5秒ごとにデータを取得（適切な間隔を設定 
         });                 
     </script>
-          
-</body>
-</html>
+
+{% endblock %}

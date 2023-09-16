@@ -1,10 +1,9 @@
-<html>
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css" >
-</head>
-<body>
+{% extends 'navbar.html' %}
+{% load static %}
+{% block title %}
+    撮影
+{% endblock %}
+{% block content %}
     <iframe id="capture-view" src="/camera/capture" width="640" height="480"></iframe>
     <script>
         var displayDuration = 15000;
@@ -14,8 +13,8 @@
     </script>
     <form method="post">
         {% csrf_token %}
-        <button type="submit" name="next">ベクトル生成</button>
-        <button type="submit" name="again" id="again_button">再撮影</button>
+        <button class="btn btn-outline-dark" type="submit" name="next">ベクトル生成</button>
+        <button class="btn btn-outline-dark" type="submit" name="again" id="again_button">再撮影</button>
     </form> 
     <script>
         // ボタンがクリックされたときにページをリロードする関数
@@ -29,5 +28,5 @@
             reloadPage(); // ページをリロード
         });
     </script>
-</body>
-</html>
+
+{% endblock %}
